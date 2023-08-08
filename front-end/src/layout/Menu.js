@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
  * @returns {JSX.Element}
  */
 
-//Tailwind
 function Menu() {
   return (
     <nav className='navbar navbar-dark bg-[#393a44;] align-items-start p-0'>
