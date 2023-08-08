@@ -15,9 +15,8 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
-  const newReservation = req.body.data;
-  const reservation = await service.create(newReservation);
-  res.status(201).json({ data: reservation[0] });
+  const data = await service.create(req.body.data);
+  res.status(201).json({ data: data[0] });
 }
 
 module.exports = {
