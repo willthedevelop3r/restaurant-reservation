@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createReservation } from '../utils/api';
 import { useHistory } from 'react-router-dom';
 import Form from './Form';
+import ErrorAlert from './ErrorAlert';
 
 const CreateReservation = () => {
   const history = useHistory();
@@ -13,6 +14,7 @@ const CreateReservation = () => {
     reservation_time: '',
     people: 1,
   });
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,6 +52,7 @@ const CreateReservation = () => {
       })
       .catch((error) => {
         console.error('Error creating reservation:', error);
+        setError(error);
       });
     return () => abortController.abort(); // Cleanup the AbortController
   };
@@ -57,6 +60,7 @@ const CreateReservation = () => {
   return (
     <div>
       <h2>Create a New Reservation</h2>
+      <ErrorAlert error={error} />
       <Form
         formData={formData}
         handleChange={handleChange}
