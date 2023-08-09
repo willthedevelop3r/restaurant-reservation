@@ -57,6 +57,44 @@ async function create(req, res) {
     return res.status(400).json({ error: 'Restaurant is closed on Tuesdays.' });
   }
 
+  // Parsing reservation_time
+  const reservationTime = reservation_time.split(':');
+  const reservationHours = Number(reservationTime[0]);
+  const reservationMinutes = Number(reservationTime[1]);
+
+  // Check if the reservation time is before 10:30 AM
+  if (
+    reservationHours < 10 ||
+    (reservationHours === 10 && reservationMinutes < 30)
+  ) {
+    return res
+      .status(400)
+      .json({ error: 'Reservation time must be after 10:30 AM.' });
+  }
+
+  // Check if the reservation time is after 9:30 PM
+  if (
+    (reservationHours === 21 && reservationMinutes > 30) ||
+    reservationHours > 21
+  ) {
+    return res
+      .status(400)
+      .json({ error: 'Reservation time must be before 9:30 PM.' });
+  }
+
+  // Combine reservation date and time for complete date object
+  const reservationDateTime = new Date(
+    `${reservation_date}T${reservation_time}`
+  );
+  const now = new Date();
+
+  // Check if the reservation date and time are in the past
+  if (reservationDateTime <= now) {
+    return res
+      .status(400)
+      .json({ error: 'Reservation date and time must be in the future.' });
+  }
+
   // Validation check for reservation_time
   if (!/^([01]\d|2[0-3]):([0-5]\d)$/.test(reservation_time)) {
     return res.status(400).json({ error: 'Invalid reservation_time.' });
