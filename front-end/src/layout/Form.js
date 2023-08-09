@@ -1,41 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const ReservationForm = () => {
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    mobile_number: '',
-    reservation_date: '',
-    reservation_time: '',
-    people: 1,
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Need to handle form submission
-    console.log(formData);
-    // Reset the form after submission
-    setFormData({
-      first_name: '',
-      last_name: '',
-      mobile_number: '',
-      reservation_date: '',
-      reservation_time: '',
-      people: 1,
-    });
-  };
-
+const Form = ({ formData, handleChange, handleSubmit, handleCancel }) => {
   return (
     <div>
-      <h2>Create a New Reservation</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>First Name:</label>
@@ -98,11 +65,13 @@ const ReservationForm = () => {
             required
           />
         </div>
-        <button>Submit</button>
-        <button>Cancel</button>
+        <button type='submit'>Submit</button>
+        <button type='button' onClick={handleCancel}>
+          Cancel
+        </button>
       </form>
     </div>
   );
 };
 
-export default ReservationForm;
+export default Form;

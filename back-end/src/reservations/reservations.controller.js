@@ -10,6 +10,7 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
+  console.log('Request body:', req.body);
   if (!req.body.data) {
     return res.status(400).json({ error: 'Request body must include data.' });
   }
