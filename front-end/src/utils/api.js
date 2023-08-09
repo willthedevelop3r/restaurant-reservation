@@ -2,9 +2,9 @@
  * Defines the base URL for the API.
  * The default values is overridden by the `API_BASE_URL` environment variable.
  */
+
 import formatReservationDate from './format-reservation-date';
 import formatReservationTime from './format-reservation-date';
-import axios from 'axios';
 
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
@@ -70,12 +70,13 @@ export async function listReservations(params, signal) {
 }
 
 export async function createReservation(formData) {
-  return axios
-    .post(`${API_BASE_URL}/reservations`, { data: formData })
-    .then((response) => {
-      return response.data; // Return the response data (reservation object)
-    })
-    .catch((error) => {
-      throw error; // Throw the error for the caller to handle
-    });
+  const response = await fetch(`${API_BASE_URL}/reservations`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ data: formData }),
+  });
+
+  return response.json().then((response) => response.data);
 }
