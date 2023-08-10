@@ -15,8 +15,16 @@ function create(newReservation) {
   return knex('reservations').insert(newReservation).returning('*');
 }
 
+function read(reservationId) {
+  return knex('reservations')
+    .select('*')
+    .where({ reservation_id: reservationId })
+    .first();
+}
+
 module.exports = {
   list,
   listByDate,
   create,
+  read,
 };

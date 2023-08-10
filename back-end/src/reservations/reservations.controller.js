@@ -27,9 +27,8 @@ async function create(req, res) {
   ];
 
   for (const field of requiredFields) {
-    if (!req.body.data[field]) {
+    if (!req.body.data[field])
       return res.status(400).json({ error: `${field} is required.` });
-    }
   }
 
   if (typeof people !== 'number') {
@@ -104,7 +103,21 @@ async function create(req, res) {
   res.status(201).json({ data: data[0] });
 }
 
+async function read(req, res) {
+  const reservationId = req.params.reservation_Id;
+  service.read(reservationId);
+
+  if (!reservation) {
+    return res
+      .status(404)
+      .json({ error: `Reservation not found: ${reservationId}` });
+  }
+
+  res.status(200).json({ data: reservation });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: asyncErrorBoundary(create),
+  read: asyncErrorBoundary(read),
 };
