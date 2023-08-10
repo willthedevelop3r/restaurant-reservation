@@ -80,3 +80,15 @@ export async function createReservation(formData) {
 
   return response.json().then((response) => response.data);
 }
+
+export async function createTable(formData) {
+  const response = await fetch(`${API_BASE_URL}/tables`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ data: formData }),
+  });
+
+  return response.json().then((response) => response.data);
+}

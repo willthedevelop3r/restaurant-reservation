@@ -1,6 +1,11 @@
 import React from 'react';
 
-const Form = ({ formData, handleChange, handleSubmit, handleCancel }) => {
+const ReservationForm = ({
+  formData,
+  handleChange,
+  handleSubmit,
+  handleCancel,
+}) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -74,4 +79,4 @@ const Form = ({ formData, handleChange, handleSubmit, handleCancel }) => {
   );
 };
 
-export default Form;
+export default ReservationForm;
