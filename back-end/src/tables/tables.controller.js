@@ -1,5 +1,6 @@
 const service = require('./tables.service');
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
+const reservationsService = require('../reservations/reservations.service');
 
 async function list(req, res) {
   const data = await service.list();
@@ -8,7 +9,7 @@ async function list(req, res) {
 
 async function read(req, res) {
   const tableId = req.params.table_id;
-  const data = await service.read(tableId);
+  const data = await service.readTable(tableId);
 
   if (!data) {
     return res.status(404).json({ error: `Table not found: ${tableId}` });
@@ -44,8 +45,47 @@ async function create(req, res) {
   res.status(201).json({ data: data[0] });
 }
 
+async function seat(req, res) {
+  const tableId = req.params.table_id;
+
+  if (!req.body.data) {
+    return res.status(400).json({ error: 'Data is required.' });
+  }
+  const { reservation_id: reservationId } = req.body.data;
+
+  if (!reservationId) {
+    return res.status(400).json({ error: 'reservation_id is required.' });
+  }
+
+  // Check if the reservation exists
+  const reservation = await reservationsService.readReservation(reservationId); // This function should return reservation data based on the reservationId.
+  if (!reservation) {
+    return res
+      .status(404)
+      .json({ error: `Reservation not found: ${reservationId}` });
+  }
+
+  // Check if the table is occupied
+  const table = await service.readTable(tableId);
+  if (table.reservation_id) {
+    return res.status(400).json({ error: 'Table is already occupied.' });
+  }
+
+  // Check if the table has sufficient capacity for the reservation
+  if (table.capacity < reservation.people) {
+    // Assuming 'people' is the field in the reservation object which stores the number of people for that reservation.
+    return res.status(400).json({
+      error: `Table's capacity of ${table.capacity} cannot accommodate the reservation for ${reservation.people} people.`,
+    });
+  }
+
+  const data = await service.seatReservation(tableId, reservationId);
+  res.status(200).json({ data: data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: asyncErrorBoundary(create),
   read: asyncErrorBoundary(read),
+  seat: asyncErrorBoundary(seat),
 };

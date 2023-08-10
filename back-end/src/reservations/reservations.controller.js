@@ -105,7 +105,7 @@ async function create(req, res) {
 
 async function read(req, res) {
   const reservationId = req.params.reservation_Id;
-  const data = await service.read(reservationId);
+  const data = await service.readReservation(reservationId);
 
   if (!data) {
     return res
