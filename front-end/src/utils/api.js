@@ -92,3 +92,11 @@ export async function createTable(formData) {
 
   return response.json().then((response) => response.data);
 }
+
+export async function listTables(signal) {
+  const response = await fetch(`${API_BASE_URL}/tables`, {
+    method: 'GET',
+    signal,
+  });
+  return response.json().then((response) => response.data);
+}

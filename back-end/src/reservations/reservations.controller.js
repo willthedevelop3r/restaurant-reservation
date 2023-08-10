@@ -11,6 +11,7 @@ async function list(req, res) {
 
 async function create(req, res) {
   console.log('Request body:', req.body);
+
   if (!req.body.data) {
     return res.status(400).json({ error: 'Request body must include data.' });
   }
@@ -42,16 +43,8 @@ async function create(req, res) {
     return res.status(400).json({ error: 'Invalid reservation_date.' });
   }
 
-  // Check if the reservation date is in the past
-  const reservationDate = new Date(reservation_date);
-  const today = new Date();
-  if (reservationDate < today) {
-    return res
-      .status(400)
-      .json({ error: 'Reservation date must be in the future.' });
-  }
-
   // Check if the reservation date falls on a Tuesday
+  const reservationDate = new Date(reservation_date);
   if (reservationDate.getUTCDay() === 2) {
     return res.status(400).json({ error: 'Restaurant is closed on Tuesdays.' });
   }
