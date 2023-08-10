@@ -105,15 +105,15 @@ async function create(req, res) {
 
 async function read(req, res) {
   const reservationId = req.params.reservation_Id;
-  service.read(reservationId);
+  const data = await service.read(reservationId);
 
-  if (!reservation) {
+  if (!data) {
     return res
       .status(404)
       .json({ error: `Reservation not found: ${reservationId}` });
   }
 
-  res.status(200).json({ data: reservation });
+  res.status(200).json({ data: data });
 }
 
 module.exports = {
