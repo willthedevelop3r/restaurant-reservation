@@ -58,7 +58,7 @@ async function seat(req, res) {
   }
 
   // Check if the reservation exists
-  const reservation = await reservationsService.readReservation(reservationId); // This function should return reservation data based on the reservationId.
+  const reservation = await reservationsService.readReservation(reservationId);
   if (!reservation) {
     return res
       .status(404)
@@ -73,7 +73,6 @@ async function seat(req, res) {
 
   // Check if the table has sufficient capacity for the reservation
   if (table.capacity < reservation.people) {
-    // Assuming 'people' is the field in the reservation object which stores the number of people for that reservation.
     return res.status(400).json({
       error: `Table's capacity of ${table.capacity} cannot accommodate the reservation for ${reservation.people} people.`,
     });
@@ -83,9 +82,27 @@ async function seat(req, res) {
   res.status(200).json({ data: data });
 }
 
+async function finish(req, res, next) {
+  const { table_id } = req.params;
+  const table = await service.readTable(table_id);
+
+  // Check if the table exists
+  if (!table) {
+    return res.status(404).json({ error: `Table not found: ${table_id}` });
+  }
+
+  if (!table.reservation_id) {
+    return res.status(400).json({ error: 'The table is not occupied.' });
+  }
+
+  await service.finishTable(table_id);
+  res.sendStatus(200);
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: asyncErrorBoundary(create),
   read: asyncErrorBoundary(read),
   seat: asyncErrorBoundary(seat),
+  finish: asyncErrorBoundary(finish),
 };

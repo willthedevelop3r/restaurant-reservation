@@ -21,9 +21,16 @@ function seatReservation(tableId, reservationId) {
   });
 }
 
+function finishTable(tableId) {
+  return knex('tables')
+    .where({ table_id: tableId })
+    .update({ reservation_id: null });
+}
+
 module.exports = {
   list,
   readTable,
   create,
   seatReservation,
+  finishTable,
 };
