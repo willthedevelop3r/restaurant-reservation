@@ -100,3 +100,26 @@ export async function listTables(signal) {
   });
   return response.json().then((response) => response.data);
 }
+
+export async function readReservation(reservation_id) {
+  const response = await fetch(
+    `${API_BASE_URL}/reservations/${reservation_id}`,
+    {
+      method: 'GET',
+    }
+  );
+
+  return response.json().then((response) => response.data);
+}
+
+export async function seatTable(table_id, reservation_id) {
+  const response = await fetch(`${API_BASE_URL}/tables/${table_id}/seat`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ data: { reservation_id: reservation_id } }),
+  });
+
+  return response.json().then((response) => response.data);
+}
