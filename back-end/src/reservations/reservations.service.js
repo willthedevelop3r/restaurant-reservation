@@ -22,9 +22,17 @@ function readReservation(reservationId) {
     .first();
 }
 
+async function updateStatus(reservation_id, status) {
+  return knex('reservations')
+    .where({ reservation_id })
+    .update({ status }, '*')
+    .then((updatedRecords) => updatedRecords[0]);
+}
+
 module.exports = {
   list,
   listByDate,
   create,
   readReservation,
+  updateStatus,
 };

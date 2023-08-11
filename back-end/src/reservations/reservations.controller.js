@@ -92,6 +92,13 @@ async function create(req, res) {
     return res.status(400).json({ error: 'Invalid reservation_time.' });
   }
 
+  // Validation for status
+  if (['seated', 'finished'].includes(req.body.data.status)) {
+    return res.status(400).json({
+      error: `Reservation cannot be created with status: ${req.body.data.status}`,
+    });
+  }
+
   const data = await service.create(req.body.data);
   res.status(201).json({ data: data[0] });
 }
@@ -109,8 +116,38 @@ async function read(req, res) {
   res.status(200).json({ data: data });
 }
 
+async function updateStatus(req, res) {
+  const { status } = req.body.data;
+  const { reservation_Id } = req.params;
+
+  const validStatuses = ['booked', 'seated', 'finished'];
+
+  if (!validStatuses.includes(status)) {
+    return res.status(400).json({ error: `Invalid status: ${status}.` });
+  }
+
+  // Check if the reservation exists
+  const currentReservation = await service.readReservation(reservation_Id);
+
+  if (!currentReservation) {
+    return res
+      .status(404)
+      .json({ error: `Reservation with ID: ${reservation_Id} not found.` });
+  }
+
+  // If the reservation exists but its status is "finished"
+  if (currentReservation.status === 'finished') {
+    return res.status(400).json({
+      error: `Reservation with ID: ${reservation_Id} has a status of "finished" and cannot be updated.`,
+    });
+  }
+
+  const data = await service.updateStatus(reservation_Id, status);
+  res.json({ data: data });
+}
 module.exports = {
   list: asyncErrorBoundary(list),
   create: asyncErrorBoundary(create),
   read: asyncErrorBoundary(read),
+  updateStatus: asyncErrorBoundary(updateStatus),
 };
