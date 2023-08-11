@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { listReservations, listTables } from '../utils/api';
+import { listReservations, listTables, finishTable } from '../utils/api';
 import ErrorAlert from '../layout/ErrorAlert';
 import { previous, today, next } from '../utils/date-time';
 
@@ -33,6 +33,18 @@ function Dashboard() {
 
   function handleDateChange(newDate) {
     setSelectedDate(newDate);
+  }
+
+  function handleFinish(tableId) {
+    if (
+      window.confirm(
+        'Is this table ready to seat new guests? This cannot be undone.'
+      )
+    ) {
+      finishTable(tableId)
+        .then(() => loadDashboard(selectedDate))
+        .catch(setTablesError);
+    }
   }
 
   return (
@@ -76,6 +88,14 @@ function Dashboard() {
               <span data-table-id-status={table.table_id}>
                 {table.reservation_id ? 'Occupied' : 'Free'}
               </span>
+              {table.reservation_id && (
+                <button
+                  data-table-id-finish={table.table_id}
+                  onClick={() => handleFinish(table.table_id)}
+                >
+                  Finish
+                </button>
+              )}
             </div>
           ))
         ) : (

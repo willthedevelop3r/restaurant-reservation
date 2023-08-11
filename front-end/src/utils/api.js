@@ -78,6 +78,11 @@ export async function createReservation(formData) {
     body: JSON.stringify({ data: formData }),
   });
 
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
+
   return response.json().then((response) => response.data);
 }
 
@@ -90,6 +95,11 @@ export async function createTable(formData) {
     body: JSON.stringify({ data: formData }),
   });
 
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
+
   return response.json().then((response) => response.data);
 }
 
@@ -98,6 +108,12 @@ export async function listTables(signal) {
     method: 'GET',
     signal,
   });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
+
   return response.json().then((response) => response.data);
 }
 
@@ -108,6 +124,11 @@ export async function readReservation(reservation_id) {
       method: 'GET',
     }
   );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
 
   return response.json().then((response) => response.data);
 }
@@ -121,5 +142,24 @@ export async function seatTable(table_id, reservation_id) {
     body: JSON.stringify({ data: { reservation_id: reservation_id } }),
   });
 
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
+
   return response.json().then((response) => response.data);
+}
+
+export async function finishTable(table_id) {
+  const response = await fetch(`${API_BASE_URL}/tables/${table_id}/seat`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
 }
