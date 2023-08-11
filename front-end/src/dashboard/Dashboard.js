@@ -48,17 +48,30 @@ function Dashboard() {
   }
 
   return (
-    <main>
-      <h1 className='text-xl font-bold'>Dashboard</h1>
-      <div className='flex flex-col md:flex-row items-center mb-3'>
-        <h4 className='mb-0'>Reservations for date: {selectedDate}</h4>
-        <button onClick={() => handleDateChange(previous(selectedDate))}>
-          Previous
-        </button>
-        <button onClick={() => handleDateChange(today())}>Today</button>
-        <button onClick={() => handleDateChange(next(selectedDate))}>
-          Next
-        </button>
+    <main className='d-flex flex-column align-items-center'>
+      <h1 className='h3 font-weight-bold mb-3'>Dashboard</h1>
+      <div className='d-flex flex-column flex-md-column align-items-center gap-2 mb-3'>
+        <h4 className='mb-2'>Reservations for date: {selectedDate}</h4>
+        <div className='d-flex gap-2'>
+          <button
+            className='btn btn-primary mr-2'
+            onClick={() => handleDateChange(previous(selectedDate))}
+          >
+            Previous
+          </button>
+          <button
+            className='btn btn-primary mr-2'
+            onClick={() => handleDateChange(today())}
+          >
+            Today
+          </button>
+          <button
+            className='btn btn-primary'
+            onClick={() => handleDateChange(next(selectedDate))}
+          >
+            Next
+          </button>
+        </div>
       </div>
 
       <div>

@@ -59,7 +59,7 @@ function NewTable() {
           <label>Table name:</label>
           <input
             name='table_name'
-            value={formData.table_name} // Corrected here
+            value={formData.table_name}
             onChange={handleChange}
             required
             minLength={2}
@@ -70,7 +70,7 @@ function NewTable() {
           <input
             name='capacity'
             type='number'
-            value={formData.capacity} // Corrected here
+            value={formData.capacity}
             onChange={handleChange}
             required
             min={1}
