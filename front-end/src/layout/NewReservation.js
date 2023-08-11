@@ -48,7 +48,10 @@ const NewReservation = () => {
         });
 
         // Redirect to the dashboard page for the reservation date
-        history.push(`/dashboard?date=${reservation.reservation_date}`);
+        const dateOnly = new Date(reservation.reservation_date)
+          .toISOString()
+          .split('T')[0];
+        history.push(`/dashboard?date=${dateOnly}`);
       })
       .catch((error) => {
         console.error('Error creating reservation:', error);
