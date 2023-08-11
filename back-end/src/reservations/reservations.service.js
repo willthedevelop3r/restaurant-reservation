@@ -8,6 +8,7 @@ function listByDate(date) {
   return knex('reservations')
     .select('*')
     .where('reservation_date', date)
+    .andWhere('status', '<>', 'finished')
     .orderBy('reservation_time', 'asc');
 }
 

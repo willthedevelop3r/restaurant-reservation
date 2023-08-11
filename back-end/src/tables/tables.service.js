@@ -22,9 +22,20 @@ function seatReservation(tableId, reservationId) {
 }
 
 function finishTable(tableId) {
-  return knex('tables')
-    .where({ table_id: tableId })
-    .update({ reservation_id: null });
+  return knex.transaction(async (trx) => {
+    const table = await trx('tables')
+      .select('*')
+      .where({ table_id: tableId })
+      .first();
+
+    await trx('reservations')
+      .where({ reservation_id: table.reservation_id })
+      .update({ status: 'finished' });
+
+    await trx('tables')
+      .where({ table_id: tableId })
+      .update({ reservation_id: null });
+  });
 }
 
 module.exports = {

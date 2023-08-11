@@ -51,6 +51,7 @@ async function seat(req, res) {
   if (!req.body.data) {
     return res.status(400).json({ error: 'Data is required.' });
   }
+
   const { reservation_id: reservationId } = req.body.data;
 
   if (!reservationId) {
@@ -63,6 +64,11 @@ async function seat(req, res) {
     return res
       .status(404)
       .json({ error: `Reservation not found: ${reservationId}` });
+  }
+
+  // Check if the reservation is already seated
+  if (reservation.status === 'seated') {
+    return res.status(400).json({ error: 'Reservation is already seated.' });
   }
 
   // Check if the table is occupied
@@ -78,11 +84,16 @@ async function seat(req, res) {
     });
   }
 
+  // Seat the reservation at the table
   const data = await service.seatReservation(tableId, reservationId);
+
+  // Update the reservation status to 'seated'
+  await reservationsService.updateStatus(reservationId, 'seated');
+
   res.status(200).json({ data: data });
 }
 
-async function finish(req, res, next) {
+async function finish(req, res) {
   const { table_id } = req.params;
   const table = await service.readTable(table_id);
 
