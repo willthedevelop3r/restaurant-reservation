@@ -49,8 +49,9 @@ function Dashboard() {
 
   return (
     <main className='d-flex flex-column align-items-center'>
-      <h1 className='h3 font-weight-bold mb-3'>Dashboard</h1>
-      <div className='d-flex flex-column flex-md-column align-items-center gap-2 mb-3'>
+      <h1 className='font-weight-bold mb-3'>Dashboard</h1>
+
+      <div className='d-flex flex-column align-items-center gap-2 mb-3'>
         <h4 className='mb-2'>Reservations for date: {selectedDate}</h4>
         <div className='d-flex gap-2'>
           <button
@@ -74,17 +75,30 @@ function Dashboard() {
         </div>
       </div>
 
-      <div>
+      <div className='d-flex flex-column align-items-center'>
         <h2>Reservations</h2>
         {reservations.length ? (
           reservations.map((reservation) => (
-            <div key={reservation.reservation_id}>
-              <p>
-                {reservation.first_name} {reservation.last_name}
-              </p>
-              <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-                <button>Seat</button>
-              </Link>
+            <div key={reservation.reservation_id} className='mb-3'>
+              <div className='card text-center' style={{ width: '18rem' }}>
+                <div className='card-body'>
+                  <h5 className='card-title'>
+                    {reservation.first_name} {reservation.last_name}
+                  </h5>
+                  <h6 className='card-subtitle mb-2 text-muted'>
+                    {reservation.reservation_date} at{' '}
+                    {reservation.reservation_time}
+                  </h6>
+                  <p className='card-text'>
+                    Mobile: {reservation.mobile_number}
+                  </p>
+                  <p className='card-text'>People: {reservation.people}</p>
+                  <p className='card-text'>Status: {reservation.status}</p>
+                  <Link to={`/reservations/${reservation.reservation_id}/seat`}>
+                    <button className='btn btn-primary'>Seat</button>
+                  </Link>
+                </div>
+              </div>
             </div>
           ))
         ) : (
@@ -92,12 +106,12 @@ function Dashboard() {
         )}
       </div>
 
-      <div>
+      <div className='d-flex flex-column align-items-center'>
         <h2>Tables</h2>
         {tables.length ? (
           tables.map((table) => (
-            <div key={table.table_id}>
-              <p>{table.table_name}</p>
+            <div key={table.table_id} className='table-entry mb-3 text-center'>
+              <p className='mb-1'>{table.table_name}</p>
               <span data-table-id-status={table.table_id}>
                 {table.reservation_id ? 'Occupied' : 'Free'}
               </span>
@@ -105,6 +119,7 @@ function Dashboard() {
                 <button
                   data-table-id-finish={table.table_id}
                   onClick={() => handleFinish(table.table_id)}
+                  className='btn btn-primary ml-2'
                 >
                   Finish
                 </button>
@@ -118,7 +133,7 @@ function Dashboard() {
 
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
-      {JSON.stringify(reservations)}
+      {/* {JSON.stringify(reservations)} */}
     </main>
   );
 }
