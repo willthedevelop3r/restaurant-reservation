@@ -93,10 +93,19 @@ function Dashboard() {
                     Mobile: {reservation.mobile_number}
                   </p>
                   <p className='card-text'>People: {reservation.people}</p>
-                  <p className='card-text'>Status: {reservation.status}</p>
-                  <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-                    <button className='btn btn-primary'>Seat</button>
-                  </Link>
+                  <p
+                    className='card-text'
+                    data-reservation-id-status={reservation.reservation_id}
+                  >
+                    Status: {reservation.status}
+                  </p>
+                  {reservation.status === 'booked' && (
+                    <Link
+                      to={`/reservations/${reservation.reservation_id}/seat`}
+                    >
+                      <button className='btn btn-primary'>Seat</button>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
