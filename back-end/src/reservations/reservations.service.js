@@ -13,7 +13,10 @@ function listByDate(date) {
 }
 
 function create(newReservation) {
-  return knex('reservations').insert(newReservation).returning('*');
+  return knex('reservations')
+    .insert(newReservation)
+    .returning('*')
+    .then((createdReservation) => createdReservation[0]);
 }
 
 function readReservation(reservationId) {
@@ -39,6 +42,13 @@ function search(mobile_number) {
     .orderBy('reservation_date');
 }
 
+async function update(reservationId, updatedReservation) {
+  return knex('reservations')
+    .where({ reservation_id: reservationId })
+    .update(updatedReservation, '*')
+    .then((updatedRecords) => updatedRecords[0]);
+}
+
 module.exports = {
   list,
   listByDate,
@@ -46,4 +56,5 @@ module.exports = {
   readReservation,
   updateStatus,
   search,
+  update,
 };

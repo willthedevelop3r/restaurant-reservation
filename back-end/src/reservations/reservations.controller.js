@@ -14,15 +14,27 @@ async function list(req, res) {
   res.json({ data: data });
 }
 
-async function create(req, res) {
-  console.log('Request body:', req.body);
-
+function validateDataExists(req, res, next) {
   if (!req.body.data) {
     return res.status(400).json({ error: 'Request body must include data.' });
   }
+  next();
+}
 
-  const { reservation_date, reservation_time, people } = req.body.data;
+async function validateIfReservationExists(req, res, next) {
+  const reservationId = req.params.reservation_id;
+  const data = await service.readReservation(reservationId);
 
+  if (!data) {
+    return res
+      .status(404)
+      .json({ error: `Reservation not found: ${reservationId}` });
+  }
+
+  next();
+}
+
+function validateRequiredFields(req, res, next) {
   const requiredFields = [
     'first_name',
     'last_name',
@@ -36,6 +48,11 @@ async function create(req, res) {
     if (!req.body.data[field])
       return res.status(400).json({ error: `${field} is required.` });
   }
+  next();
+}
+
+function validateReservationDetails(req, res, next) {
+  const { reservation_date, reservation_time, people } = req.body.data;
 
   if (typeof people !== 'number') {
     return res
@@ -104,12 +121,18 @@ async function create(req, res) {
     });
   }
 
+  next();
+}
+
+async function create(req, res) {
+  console.log('Request body:', req.body);
+
   const data = await service.create(req.body.data);
-  res.status(201).json({ data: data[0] });
+  res.status(201).json({ data: data });
 }
 
 async function read(req, res) {
-  const reservationId = req.params.reservation_Id;
+  const reservationId = req.params.reservation_id;
   const data = await service.readReservation(reservationId);
 
   if (!data) {
@@ -123,31 +146,25 @@ async function read(req, res) {
 
 async function updateStatus(req, res) {
   const { status } = req.body.data;
-  const { reservation_Id } = req.params;
+  const { reservation_id } = req.params;
 
-  const validStatuses = ['booked', 'seated', 'finished'];
+  const validStatuses = ['booked', 'seated', 'finished', 'cancelled'];
 
   if (!validStatuses.includes(status)) {
     return res.status(400).json({ error: `Invalid status: ${status}.` });
   }
 
   // Check if the reservation exists
-  const currentReservation = await service.readReservation(reservation_Id);
-
-  if (!currentReservation) {
-    return res
-      .status(404)
-      .json({ error: `Reservation with ID: ${reservation_Id} not found.` });
-  }
+  const currentReservation = await service.readReservation(reservation_id);
 
   // If the reservation exists but its status is "finished"
   if (currentReservation.status === 'finished') {
     return res.status(400).json({
-      error: `Reservation with ID: ${reservation_Id} has a status of "finished" and cannot be updated.`,
+      error: `Reservation with ID: ${reservation_id} has a status of "finished" and cannot be updated.`,
     });
   }
 
-  const data = await service.updateStatus(reservation_Id, status);
+  const data = await service.updateStatus(reservation_id, status);
   res.json({ data: data });
 }
 
@@ -167,10 +184,30 @@ async function search(req, res) {
   res.json({ data: data });
 }
 
+async function update(req, res) {
+  const reservationId = req.params.reservation_id;
+
+  const updatedReservation = await service.update(reservationId, req.body.data);
+
+  res.json({ data: updatedReservation });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: asyncErrorBoundary(create),
+  create: [
+    validateDataExists,
+    validateRequiredFields,
+    validateReservationDetails,
+    asyncErrorBoundary(create),
+  ],
   read: asyncErrorBoundary(read),
-  updateStatus: asyncErrorBoundary(updateStatus),
+  updateStatus: [validateIfReservationExists, asyncErrorBoundary(updateStatus)],
   search: asyncErrorBoundary(search),
+  update: [
+    validateIfReservationExists,
+    validateDataExists,
+    validateRequiredFields,
+    validateReservationDetails,
+    asyncErrorBoundary(update),
+  ],
 };
