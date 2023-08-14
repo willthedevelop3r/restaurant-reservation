@@ -6,27 +6,32 @@ function SearchReservation() {
   const [reservations, setReservations] = useState([]);
   const [error, setError] = useState(null);
 
-  const handleSearch = async () => {
-    try {
-      const results = await searchReservationsByPhoneNumber(mobileNumber);
-      setReservations(results);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-    }
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    searchReservationsByPhoneNumber(mobileNumber)
+      .then((results) => {
+        setReservations(results);
+        setError(null);
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
   };
 
   return (
     <div>
       <h2>Search Reservation by Phone Number</h2>
-      <input
-        type='text'
-        name='mobile_number'
-        placeholder='Enter Mobile Number'
-        value={mobileNumber}
-        onChange={(e) => setMobileNumber(e.target.value)}
-      />
-      <button onClick={handleSearch}>Find</button>
+      <form onSubmit={handleSearch}>
+        <input
+          type='text'
+          name='mobile_number'
+          placeholder='Enter Mobile Number'
+          value={mobileNumber}
+          onChange={(e) => setMobileNumber(e.target.value)}
+        />
+        <button type='submit'>Find</button>
+      </form>
 
       {error && <div className='alert alert-danger'>{error}</div>}
 

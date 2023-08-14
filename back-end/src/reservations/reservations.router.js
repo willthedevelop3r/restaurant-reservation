@@ -13,6 +13,7 @@ router
   .put(controller.updateStatus)
   .all(methodNotAllowed);
 
+router.route('/search').get(controller.search).all(methodNotAllowed);
 router.route('/:reservation_Id').get(controller.read).all(methodNotAllowed);
 
 router
