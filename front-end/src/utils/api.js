@@ -170,3 +170,12 @@ export async function finishTable(table_id) {
     throw new Error(errorData.error);
   }
 }
+
+export async function searchReservationsByPhoneNumber(mobile_number, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/search`);
+  url.searchParams.append('mobile_number', mobile_number);
+
+  return await fetchJson(url, { headers, signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}

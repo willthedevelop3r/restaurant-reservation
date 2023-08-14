@@ -2,10 +2,15 @@ const service = require('./reservations.service');
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
 
 async function list(req, res) {
-  const { date } = req.query;
+  const { date, mobile_number } = req.query;
+
+  // Handle search by mobile_number
+  if (mobile_number) {
+    const data = await service.search(mobile_number);
+    return res.json({ data: data });
+  }
 
   const data = date ? await service.listByDate(date) : await service.list();
-
   res.json({ data: data });
 }
 
@@ -145,9 +150,27 @@ async function updateStatus(req, res) {
   const data = await service.updateStatus(reservation_Id, status);
   res.json({ data: data });
 }
+
+async function search(req, res) {
+  const { mobile_number } = req.query;
+
+  if (!mobile_number) {
+    return res.status(400).json({ error: 'mobile_number is required.' });
+  }
+
+  const data = await service.search(mobile_number);
+
+  if (data.length === 0) {
+    return res.status(404).json({ error: 'No reservations found.' });
+  }
+
+  res.json({ data: data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: asyncErrorBoundary(create),
   read: asyncErrorBoundary(read),
   updateStatus: asyncErrorBoundary(updateStatus),
+  search: asyncErrorBoundary(search),
 };
