@@ -12,7 +12,7 @@ function NewTable() {
   const [error, setError] = useState(null);
   const history = useHistory();
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -60,7 +60,7 @@ function NewTable() {
           <input
             name='table_name'
             value={formData.table_name}
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
             minLength={2}
           />
@@ -71,7 +71,7 @@ function NewTable() {
             name='capacity'
             type='number'
             value={formData.capacity}
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
             min={1}
           />

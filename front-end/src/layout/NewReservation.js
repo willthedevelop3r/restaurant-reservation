@@ -16,7 +16,7 @@ const NewReservation = () => {
   const [error, setError] = useState(null);
   const history = useHistory();
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -66,7 +66,7 @@ const NewReservation = () => {
       <ErrorAlert error={error} />
       <ReservationForm
         formData={formData}
-        handleChange={handleChange}
+        handleInputChange={handleInputChange}
         handleSubmit={handleSubmit}
         handleCancel={handleCancel}
       />

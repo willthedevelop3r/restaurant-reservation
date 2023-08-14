@@ -2,7 +2,7 @@ import React from 'react';
 
 const ReservationForm = ({
   formData,
-  handleChange,
+  handleInputChange,
   handleSubmit,
   handleCancel,
 }) => {
@@ -15,7 +15,7 @@ const ReservationForm = ({
             type='text'
             name='first_name'
             value={formData.first_name}
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -25,7 +25,7 @@ const ReservationForm = ({
             type='text'
             name='last_name'
             value={formData.last_name}
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -35,7 +35,7 @@ const ReservationForm = ({
             type='text'
             name='mobile_number'
             value={formData.mobile_number}
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -45,7 +45,7 @@ const ReservationForm = ({
             type='date'
             name='reservation_date'
             value={formData.reservation_date}
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -55,7 +55,7 @@ const ReservationForm = ({
             type='time'
             name='reservation_time'
             value={formData.reservation_time}
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -65,7 +65,7 @@ const ReservationForm = ({
             type='number'
             name='people'
             value={formData.people}
-            onChange={handleChange}
+            onChange={handleInputChange}
             min='1'
             required
           />

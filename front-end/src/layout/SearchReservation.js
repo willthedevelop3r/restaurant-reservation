@@ -8,15 +8,13 @@ function SearchReservation() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-
     searchReservationsByPhoneNumber(mobileNumber)
-      .then((results) => {
-        setReservations(results);
-        setError(null);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
+      .then(setReservations)
+      .catch((err) => setError(err.message));
+  };
+
+  const handleInputChange = (e) => {
+    setMobileNumber(e.target.value);
   };
 
   return (
@@ -28,7 +26,7 @@ function SearchReservation() {
           name='mobile_number'
           placeholder='Enter Mobile Number'
           value={mobileNumber}
-          onChange={(e) => setMobileNumber(e.target.value)}
+          onChange={handleInputChange}
         />
         <button type='submit'>Find</button>
       </form>
@@ -39,8 +37,12 @@ function SearchReservation() {
         <ul>
           {reservations.map((reservation) => (
             <li key={reservation.reservation_id}>
-              {reservation.first_name} {reservation.last_name} -{' '}
-              {reservation.mobile_number}
+              <strong>Name:</strong> {reservation.first_name}{' '}
+              {reservation.last_name} <br />
+              <strong>Mobile:</strong> {reservation.mobile_number} <br />
+              <strong>Date:</strong> {reservation.reservation_date} <br />
+              <strong>Time:</strong> {reservation.reservation_time} <br />
+              <strong>Party Size:</strong> {reservation.people} <br />
             </li>
           ))}
         </ul>

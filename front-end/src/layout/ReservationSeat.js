@@ -31,7 +31,7 @@ function ReservationSeat() {
     return () => abortController.abort();
   }, [reservation_id]);
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -108,7 +108,7 @@ function ReservationSeat() {
         type='text'
         name='name'
         value={formData.name || ''}
-        onChange={handleChange}
+        onChange={handleInputChange}
         placeholder='Name'
       />
 
