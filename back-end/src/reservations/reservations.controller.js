@@ -51,8 +51,8 @@ function validateRequiredFields(req, res, next) {
   next();
 }
 
-function validateReservationDetails(req, res, next) {
-  const { reservation_date, reservation_time, people } = req.body.data;
+function validatePeopleCount(req, res, next) {
+  const { people } = req.body.data;
 
   if (typeof people !== 'number') {
     return res
@@ -60,18 +60,28 @@ function validateReservationDetails(req, res, next) {
       .json({ error: 'Number of people must be a valid number.' });
   }
 
-  // Validation check for reservation_date
+  next();
+}
+
+function validateReservationDate(req, res, next) {
+  const { reservation_date } = req.body.data;
+
   if (isNaN(Date.parse(reservation_date))) {
     return res.status(400).json({ error: 'Invalid reservation_date.' });
   }
 
-  // Check if the reservation date falls on a Tuesday
   const reservationDate = new Date(reservation_date);
+
   if (reservationDate.getUTCDay() === 2) {
     return res.status(400).json({ error: 'Restaurant is closed on Tuesdays.' });
   }
 
-  // Parsing reservation_time
+  next();
+}
+
+function validateReservationTime(req, res, next) {
+  const { reservation_time, reservation_date } = req.body.data;
+
   const reservationTime = reservation_time.split(':');
   const reservationHours = Number(reservationTime[0]);
   const reservationMinutes = Number(reservationTime[1]);
@@ -96,7 +106,7 @@ function validateReservationDetails(req, res, next) {
       .json({ error: 'Reservation time must be before 9:30 PM.' });
   }
 
-  // Combine reservation date and time for complete date object
+  // Combine reservation date and time for a complete date object
   const reservationDateTime = new Date(
     `${reservation_date}T${reservation_time}`
   );
@@ -109,16 +119,38 @@ function validateReservationDetails(req, res, next) {
       .json({ error: 'Reservation date and time must be in the future.' });
   }
 
-  // Validation check for reservation_time
-  if (!/^([01]\d|2[0-3]):([0-5]\d)$/.test(reservation_time)) {
+  // // Validation check for reservation_time
+  if (!/^([01]\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?$/i.test(reservation_time)) {
     return res.status(400).json({ error: 'Invalid reservation_time.' });
   }
 
-  // Validation for status
+  next();
+}
+
+function validateReservationStatus(req, res, next) {
   if (['seated', 'finished'].includes(req.body.data.status)) {
     return res.status(400).json({
       error: `Reservation cannot be created with status: ${req.body.data.status}`,
     });
+  }
+
+  next();
+}
+
+function validateUpdateReservationTime(req, res, next) {
+  const { reservation_time } = req.body.data;
+
+  if (!reservation_time) {
+    return next(); // If reservation_time is not being updated, move to the next middleware.
+  }
+
+  // Validation check for reservation_time
+  const isValidFormat = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/.test(
+    reservation_time
+  );
+
+  if (!isValidFormat) {
+    return res.status(400).json({ error: 'Invalid reservation_time.' });
   }
 
   next();
@@ -154,7 +186,6 @@ async function updateStatus(req, res) {
     return res.status(400).json({ error: `Invalid status: ${status}.` });
   }
 
-  // Check if the reservation exists
   const currentReservation = await service.readReservation(reservation_id);
 
   // If the reservation exists but its status is "finished"
@@ -197,7 +228,10 @@ module.exports = {
   create: [
     validateDataExists,
     validateRequiredFields,
-    validateReservationDetails,
+    validatePeopleCount,
+    validateReservationDate,
+    validateReservationTime,
+    validateReservationStatus,
     asyncErrorBoundary(create),
   ],
   read: asyncErrorBoundary(read),
@@ -207,7 +241,9 @@ module.exports = {
     validateIfReservationExists,
     validateDataExists,
     validateRequiredFields,
-    validateReservationDetails,
+    validatePeopleCount,
+    validateReservationDate,
+    validateUpdateReservationTime,
     asyncErrorBoundary(update),
   ],
 };
