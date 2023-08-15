@@ -48,34 +48,51 @@ function NewTable() {
   };
 
   return (
-    <div>
-      <h2>Create a New Table</h2>
+    <div className='container mt-5'>
+      <h2 className='text-center font-weight-bold '>Create a New Table</h2>
       <ErrorAlert error={error} />
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Table name:</label>
+      <form
+        onSubmit={handleSubmit}
+        className='mx-auto'
+        style={{ maxWidth: '500px' }}
+      >
+        <div className='form-group'>
+          <label htmlFor='table_name'>Table Name:</label>
           <input
+            type='text'
             name='table_name'
+            id='table_name'
             value={formData.table_name}
             onChange={handleInputChange}
             required
             minLength={2}
+            className='form-control rounded'
           />
         </div>
-        <div>
-          <label>Capacity:</label>
+
+        <div className='form-group'>
+          <label htmlFor='capacity'>Capacity:</label>
           <input
-            name='capacity'
             type='number'
+            name='capacity'
+            id='capacity'
             value={formData.capacity}
             onChange={handleInputChange}
             required
             min={1}
+            className='form-control rounded'
           />
         </div>
-        <div>
-          <button type='submit'>Submit</button>
-          <button type='button' onClick={handleCancel}>
+
+        <div className='form-group d-flex justify-content-end'>
+          <button type='submit' className='btn btn-primary rounded-pill mr-2'>
+            Submit
+          </button>
+          <button
+            type='button'
+            onClick={handleCancel}
+            className='btn btn-secondary rounded-pill'
+          >
             Cancel
           </button>
         </div>
