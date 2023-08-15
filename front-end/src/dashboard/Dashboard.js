@@ -98,93 +98,113 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className='d-flex flex-column align-items-center'>
-        <h2 className='font-weight-bold mb-3'>Reservations</h2>
+      <div className='container'>
+        <h2 className='font-weight-bold mb-3 text-center'>Reservations</h2>
         {reservations.length ? (
-          reservations.map((reservation) => (
-            <div key={reservation.reservation_id} className='mb-3'>
-              <div className='card text-center' style={{ width: '18rem' }}>
-                <div className='card-body'>
-                  <h5 className='card-title'>
-                    {reservation.first_name} {reservation.last_name}
-                  </h5>
-                  <h6 className='card-subtitle mb-2 text-muted'>
-                    {reservation.reservation_date}
-                  </h6>
-                  <p className='card-text'>
-                    Mobile: {reservation.mobile_number}
-                  </p>
-                  <p className='card-text'>People: {reservation.people}</p>
-                  <p
-                    className='card-text'
-                    data-reservation-id-status={reservation.reservation_id}
-                  >
-                    Status: {reservation.status}
-                  </p>
+          <div className='row justify-content-center'>
+            {reservations.map((reservation) => (
+              <div
+                key={reservation.reservation_id}
+                className='col-lg-4 col-md-6 col-sm-12 mb-3'
+              >
+                <div className='card text-center' style={{ width: '100%' }}>
+                  <div className='card-body'>
+                    <h5 className='card-title'>
+                      {reservation.first_name} {reservation.last_name}
+                    </h5>
+                    <h6 className='card-subtitle mb-2 text-muted'>
+                      {reservation.reservation_date}
+                    </h6>
+                    <p className='card-text'>
+                      Mobile: {reservation.mobile_number}
+                    </p>
+                    <p className='card-text'>People: {reservation.people}</p>
+                    <p
+                      className='card-text'
+                      data-reservation-id-status={reservation.reservation_id}
+                    >
+                      Status: {reservation.status}
+                    </p>
 
-                  {reservation.status === 'booked' && (
-                    <>
-                      <Link
-                        to={`/reservations/${reservation.reservation_id}/seat`}
-                      >
-                        <button className='btn btn-primary'>Seat</button>
-                      </Link>
-                      <Link
-                        to={`/reservations/${reservation.reservation_id}/edit`}
-                      >
-                        <button className='btn btn-secondary ml-2'>Edit</button>
-                      </Link>
-                      <button
-                        data-reservation-id-cancel={reservation.reservation_id}
-                        className='btn btn-danger ml-2'
-                        onClick={() => handleCancel(reservation.reservation_id)}
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  )}
+                    {reservation.status === 'booked' && (
+                      <>
+                        <Link
+                          to={`/reservations/${reservation.reservation_id}/seat`}
+                        >
+                          <button className='btn btn-primary'>Seat</button>
+                        </Link>
+                        <Link
+                          to={`/reservations/${reservation.reservation_id}/edit`}
+                        >
+                          <button className='btn btn-secondary ml-2'>
+                            Edit
+                          </button>
+                        </Link>
+                        <button
+                          data-reservation-id-cancel={
+                            reservation.reservation_id
+                          }
+                          className='btn btn-danger ml-2'
+                          onClick={() =>
+                            handleCancel(reservation.reservation_id)
+                          }
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         ) : (
-          <p>No reservations for the selected date.</p>
+          <p className='text-center'>No reservations for the selected date.</p>
         )}
       </div>
 
-      <div className='d-flex flex-column align-items-center'>
-        <h2 className='font-weight-bold mb-3'>Tables</h2>
+      <div className='container'>
+        <h2 className='font-weight-bold mb-3 text-center'>Tables</h2>
         {tables.length ? (
-          tables.map((table) => (
-            <div key={table.table_id} className='mb-3'>
-              <div className='card text-center' style={{ width: '18rem' }}>
-                <div className='card-body'>
-                  <h5 className='card-title'>{table.table_name}</h5>
-                  <span
-                    data-table-id-status={table.table_id}
-                    className='card-subtitle mb-2 text-muted'
-                  >
-                    {table.reservation_id ? 'Occupied' : 'Free'}
-                  </span>
-                  {table.reservation_id && (
-                    <div className='mt-2'>
-                      <button
-                        data-table-id-finish={table.table_id}
-                        onClick={() => handleFinish(table.table_id)}
-                        className='btn btn-primary'
-                      >
-                        Finish
-                      </button>
-                    </div>
-                  )}
+          <div className='row justify-content-center'>
+            {tables.map((table) => (
+              <div
+                key={table.table_id}
+                className='col-lg-4 col-md-6 col-sm-12 mb-3'
+              >
+                <div className='card text-center' style={{ width: '100%' }}>
+                  <div className='card-body'>
+                    <h5 className='card-title'>{table.table_name}</h5>
+                    <h6 className='card-subtitle mb-2 text-muted'>
+                      Capacity: {table.capacity}
+                    </h6>
+                    <span data-table-id-status={table.table_id}>
+                      Status: {table.reservation_id ? 'Occupied' : 'Free'}
+                    </span>
+                    {table.reservation_id && (
+                      <div className='mt-2'>
+                        <button
+                          data-table-id-finish={table.table_id}
+                          onClick={() => handleFinish(table.table_id)}
+                          className='btn btn-primary'
+                        >
+                          Finish
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         ) : (
-          <div className='card text-center' style={{ width: '18rem' }}>
-            <div className='card-body'>
-              <p className='card-text'>No tables available.</p>
+          <div className='row justify-content-center'>
+            <div className='col-lg-4 col-md-6 col-sm-12'>
+              <div className='card text-center' style={{ width: '100%' }}>
+                <div className='card-body'>
+                  <p className='card-text'>No tables available.</p>
+                </div>
+              </div>
             </div>
           </div>
         )}
