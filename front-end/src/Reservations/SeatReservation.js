@@ -72,33 +72,49 @@ function SeatReservation() {
   };
 
   return (
-    <div>
+    <div className='container mt-5'>
       <ErrorAlert error={error} />
 
-      <select
-        name='table_id'
-        value={selectedTable ? selectedTable.table_id : ''}
-        onChange={(e) =>
-          setSelectedTable(
-            tables.find((table) => table.table_id === Number(e.target.value))
-          )
-        }
-      >
-        {tables.length ? (
-          tables.map((table) => (
-            <option key={table.table_id} value={table.table_id}>
-              {table.table_name} - {table.capacity}
-            </option>
-          ))
-        ) : (
-          <option>No tables available</option>
-        )}
-      </select>
+      <div className='form-group'>
+        <h2 className='text-center font-weight-bold mb-4'>Seat Table</h2>
+        <select
+          name='table_id'
+          id='table_id'
+          value={selectedTable ? selectedTable.table_id : ''}
+          onChange={(e) =>
+            setSelectedTable(
+              tables.find((table) => table.table_id === Number(e.target.value))
+            )
+          }
+          className='form-control rounded'
+        >
+          {tables.length ? (
+            tables.map((table) => (
+              <option key={table.table_id} value={table.table_id}>
+                {table.table_name} - {table.capacity}
+              </option>
+            ))
+          ) : (
+            <option>No tables available</option>
+          )}
+        </select>
+      </div>
 
-      <button type='submit' onClick={handleSubmit}>
-        Submit
-      </button>
-      <button onClick={handleCancel}>Cancel</button>
+      <div className='form-group d-flex justify-content-end'>
+        <button
+          type='submit'
+          onClick={handleSubmit}
+          className='btn btn-primary rounded-pill mr-2'
+        >
+          Submit
+        </button>
+        <button
+          onClick={handleCancel}
+          className='btn btn-secondary rounded-pill'
+        >
+          Cancel
+        </button>
+      </div>
     </div>
   );
 }
