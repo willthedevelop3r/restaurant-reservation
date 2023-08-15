@@ -7,7 +7,7 @@ const ReservationForm = ({
   handleCancel,
 }) => {
   return (
-    <div className='container mt-5'>
+    <div className='container mt-4'>
       <form
         onSubmit={handleSubmit}
         className='mx-auto'

@@ -59,7 +59,9 @@ const NewReservation = () => {
 
   return (
     <div>
-      <h2>Create a New Reservation</h2>
+      <h2 className='text-center font-weight-bold mt-5'>
+        Create a New Reservation
+      </h2>
       <ErrorAlert error={error} />
       <ReservationForm
         formData={formData}
