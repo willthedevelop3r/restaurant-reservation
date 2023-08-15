@@ -7,7 +7,6 @@ function SeatReservation() {
   const [tables, setTables] = useState([]);
   const [reservation, setReservation] = useState(null);
   const [selectedTable, setSelectedTable] = useState(null);
-  const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const history = useHistory();
   const { reservation_id } = useParams();
@@ -30,14 +29,6 @@ function SeatReservation() {
 
     return () => abortController.abort();
   }, [reservation_id]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -103,14 +94,6 @@ function SeatReservation() {
           <option>No tables available</option>
         )}
       </select>
-
-      <input
-        type='text'
-        name='name'
-        value={formData.name || ''}
-        onChange={handleInputChange}
-        placeholder='Name'
-      />
 
       <button type='submit' onClick={handleSubmit}>
         Submit
