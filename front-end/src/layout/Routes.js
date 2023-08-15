@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Dashboard from '../dashboard/Dashboard';
 import NotFound from './NotFound';
@@ -8,14 +7,8 @@ import NewReservation from './NewReservation';
 import NewTable from './NewTable';
 import ReservationSeat from './ReservationSeat';
 import SearchReservation from './SearchReservation';
+import EditReservation from './EditReservation'; // <-- Import the EditReservation component
 
-/**
- * Defines all the routes for the application.
- *
- * You will need to make changes to this file.
- *
- * @returns {JSX.Element}
- */
 function Routes() {
   return (
     <Switch>
@@ -33,6 +26,11 @@ function Routes() {
       </Route>
       <Route path='/reservations/:reservation_id/seat'>
         <ReservationSeat />
+      </Route>
+      <Route path='/reservations/:reservation_id/edit'>
+        {' '}
+        {/* <-- Define the new route for editing */}
+        <EditReservation />
       </Route>
       <Route path='/search'>
         <SearchReservation />

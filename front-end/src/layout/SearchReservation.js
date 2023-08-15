@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { searchReservationsByPhoneNumber } from '../utils/api';
+import {
+  searchReservationsByPhoneNumber,
+  updateReservationStatus,
+} from '../utils/api';
+import { Link } from 'react-router-dom';
+import ErrorAlert from './ErrorAlert';
 
 function SearchReservation() {
   const [mobileNumber, setMobileNumber] = useState('');
@@ -10,11 +15,27 @@ function SearchReservation() {
     e.preventDefault();
     searchReservationsByPhoneNumber(mobileNumber)
       .then(setReservations)
-      .catch((err) => setError(err.message));
+      .catch((error) => setError(error));
   };
 
   const handleInputChange = (e) => {
     setMobileNumber(e.target.value);
+  };
+
+  const handleCancel = (reservation_id) => {
+    const confirmed = window.confirm(
+      'Do you want to cancel this reservation? This cannot be undone.'
+    );
+    if (confirmed) {
+      updateReservationStatus(reservation_id, 'cancelled')
+        .then(() => {
+          // Refresh reservations or remove the cancelled one from the list.
+          setReservations((prev) =>
+            prev.filter((res) => res.reservation_id !== reservation_id)
+          );
+        })
+        .catch((error) => setError(error));
+    }
   };
 
   return (
@@ -31,7 +52,7 @@ function SearchReservation() {
         <button type='submit'>Find</button>
       </form>
 
-      {error && <div className='alert alert-danger'>{error}</div>}
+      <ErrorAlert error={error} />
 
       {reservations.length > 0 ? (
         <ul>
@@ -43,6 +64,19 @@ function SearchReservation() {
               <strong>Date:</strong> {reservation.reservation_date} <br />
               <strong>Time:</strong> {reservation.reservation_time} <br />
               <strong>Party Size:</strong> {reservation.people} <br />
+              {reservation.status === 'booked' && (
+                <>
+                  <Link to={`/reservations/${reservation.reservation_id}/edit`}>
+                    Edit
+                  </Link>
+                  <button
+                    data-reservation-id-cancel={reservation.reservation_id}
+                    onClick={() => handleCancel(reservation.reservation_id)}
+                  >
+                    Cancel
+                  </button>
+                </>
+              )}
             </li>
           ))}
         </ul>

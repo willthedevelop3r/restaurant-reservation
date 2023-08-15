@@ -175,7 +175,56 @@ export async function searchReservationsByPhoneNumber(mobile_number, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/search`);
   url.searchParams.append('mobile_number', mobile_number);
 
-  return await fetchJson(url, { headers, signal }, [])
+  const response = await fetch(url, { headers, signal });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
+
+  return response
+    .json()
+    .then((response) => response.data)
     .then(formatReservationDate)
     .then(formatReservationTime);
+}
+
+export async function updateReservationStatus(reservation_id, status) {
+  const response = await fetch(
+    `${API_BASE_URL}/reservations/${reservation_id}/status`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: { status: status } }),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
+
+  return response.json().then((response) => response.data);
+}
+
+export async function updateReservation(reservation_id, updatedData) {
+  const response = await fetch(
+    `${API_BASE_URL}/reservations/${reservation_id}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: updatedData }),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
+
+  return response.json().then((response) => response.data);
 }

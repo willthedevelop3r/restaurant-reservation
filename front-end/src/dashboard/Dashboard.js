@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { listReservations, listTables, finishTable } from '../utils/api';
+import {
+  listReservations,
+  listTables,
+  finishTable,
+  updateReservationStatus,
+} from '../utils/api';
 import ErrorAlert from '../layout/ErrorAlert';
 import { previous, today, next } from '../utils/date-time';
 
@@ -47,6 +52,24 @@ function Dashboard() {
     }
   }
 
+  function handleCancel(reservationId) {
+    if (
+      window.confirm(
+        'Do you want to cancel this reservation? This cannot be undone.'
+      )
+    ) {
+      updateReservationStatus(reservationId, 'cancelled')
+        .then(() => {
+          return loadDashboard(selectedDate);
+        })
+        .catch((error) => {
+          console.error(
+            `There was an error canceling the reservation: ${error.message}`
+          );
+        });
+    }
+  }
+
   return (
     <main className='d-flex flex-column align-items-center'>
       <h1 className='font-weight-bold mb-3'>Dashboard</h1>
@@ -86,8 +109,7 @@ function Dashboard() {
                     {reservation.first_name} {reservation.last_name}
                   </h5>
                   <h6 className='card-subtitle mb-2 text-muted'>
-                    {reservation.reservation_date} at{' '}
-                    {reservation.reservation_time}
+                    {reservation.reservation_date}
                   </h6>
                   <p className='card-text'>
                     Mobile: {reservation.mobile_number}
@@ -99,12 +121,27 @@ function Dashboard() {
                   >
                     Status: {reservation.status}
                   </p>
+
                   {reservation.status === 'booked' && (
-                    <Link
-                      to={`/reservations/${reservation.reservation_id}/seat`}
-                    >
-                      <button className='btn btn-primary'>Seat</button>
-                    </Link>
+                    <>
+                      <Link
+                        to={`/reservations/${reservation.reservation_id}/seat`}
+                      >
+                        <button className='btn btn-primary'>Seat</button>
+                      </Link>
+                      <Link
+                        to={`/reservations/${reservation.reservation_id}/edit`}
+                      >
+                        <button className='btn btn-secondary ml-2'>Edit</button>
+                      </Link>
+                      <button
+                        data-reservation-id-cancel={reservation.reservation_id}
+                        className='btn btn-danger ml-2'
+                        onClick={() => handleCancel(reservation.reservation_id)}
+                      >
+                        Cancel
+                      </button>
+                    </>
                   )}
                 </div>
               </div>
@@ -142,7 +179,6 @@ function Dashboard() {
 
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
-      {/* {JSON.stringify(reservations)} */}
     </main>
   );
 }
