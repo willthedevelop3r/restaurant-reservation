@@ -30,10 +30,7 @@ const EditReservation = () => {
           .split('T')[0];
         setFormData(data);
       })
-      .catch((error) => {
-        console.error('Error reading reservation:', error);
-        setError(error);
-      });
+      .catch((error) => setError(error));
 
     return () => abortController.abort();
   }, [reservation_id]);
@@ -65,10 +62,7 @@ const EditReservation = () => {
           .split('T')[0];
         history.push(`/dashboard?date=${dateOnly}`);
       })
-      .catch((error) => {
-        console.error('Error updating reservation:', error);
-        setError(error);
-      });
+      .catch((error) => setError(error));
 
     return () => abortController.abort();
   };

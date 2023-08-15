@@ -53,10 +53,7 @@ const NewReservation = () => {
           .split('T')[0];
         history.push(`/dashboard?date=${dateOnly}`);
       })
-      .catch((error) => {
-        console.error('Error creating reservation:', error);
-        setError(error);
-      });
+      .catch((error) => setError(error));
     return () => abortController.abort(); // Cleanup the AbortController
   };
 

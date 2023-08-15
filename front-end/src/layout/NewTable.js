@@ -42,10 +42,7 @@ function NewTable() {
         // Redirect to the dashboard or wherever appropriate for tables
         history.push('/dashboard');
       })
-      .catch((error) => {
-        console.error('Error creating table:', error);
-        setError(error);
-      });
+      .catch((error) => setError(error));
 
     return () => abortController.abort(); // Cleanup the AbortController
   };

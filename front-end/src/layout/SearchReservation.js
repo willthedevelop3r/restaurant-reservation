@@ -54,7 +54,7 @@ function SearchReservation() {
 
       <ErrorAlert error={error} />
 
-      {reservations.length > 0 ? (
+      {reservations.length ? (
         <ul>
           {reservations.map((reservation) => (
             <li key={reservation.reservation_id}>

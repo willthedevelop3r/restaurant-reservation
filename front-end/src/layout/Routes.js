@@ -28,8 +28,6 @@ function Routes() {
         <ReservationSeat />
       </Route>
       <Route path='/reservations/:reservation_id/edit'>
-        {' '}
-        {/* <-- Define the new route for editing */}
         <EditReservation />
       </Route>
       <Route path='/search'>
