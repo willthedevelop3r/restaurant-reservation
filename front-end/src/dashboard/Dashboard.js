@@ -99,7 +99,7 @@ function Dashboard() {
       </div>
 
       <div className='d-flex flex-column align-items-center'>
-        <h2>Reservations</h2>
+        <h2 className='font-weight-bold mb-3'>Reservations</h2>
         {reservations.length ? (
           reservations.map((reservation) => (
             <div key={reservation.reservation_id} className='mb-3'>
@@ -153,27 +153,40 @@ function Dashboard() {
       </div>
 
       <div className='d-flex flex-column align-items-center'>
-        <h2>Tables</h2>
+        <h2 className='font-weight-bold mb-3'>Tables</h2>
         {tables.length ? (
           tables.map((table) => (
-            <div key={table.table_id} className='table-entry mb-3 text-center'>
-              <p className='mb-1'>{table.table_name}</p>
-              <span data-table-id-status={table.table_id}>
-                {table.reservation_id ? 'Occupied' : 'Free'}
-              </span>
-              {table.reservation_id && (
-                <button
-                  data-table-id-finish={table.table_id}
-                  onClick={() => handleFinish(table.table_id)}
-                  className='btn btn-primary ml-2'
-                >
-                  Finish
-                </button>
-              )}
+            <div key={table.table_id} className='mb-3'>
+              <div className='card text-center' style={{ width: '18rem' }}>
+                <div className='card-body'>
+                  <h5 className='card-title'>{table.table_name}</h5>
+                  <span
+                    data-table-id-status={table.table_id}
+                    className='card-subtitle mb-2 text-muted'
+                  >
+                    {table.reservation_id ? 'Occupied' : 'Free'}
+                  </span>
+                  {table.reservation_id && (
+                    <div className='mt-2'>
+                      <button
+                        data-table-id-finish={table.table_id}
+                        onClick={() => handleFinish(table.table_id)}
+                        className='btn btn-primary'
+                      >
+                        Finish
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           ))
         ) : (
-          <p>No tables available.</p>
+          <div className='card text-center' style={{ width: '18rem' }}>
+            <div className='card-body'>
+              <p className='card-text'>No tables available.</p>
+            </div>
+          </div>
         )}
       </div>
 
