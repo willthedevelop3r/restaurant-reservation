@@ -13,9 +13,21 @@ function SearchReservation() {
 
   const handleSearch = (e) => {
     e.preventDefault();
+
     searchReservationsByPhoneNumber(mobileNumber)
-      .then(setReservations)
-      .catch((error) => setError(error));
+      .then((data) => {
+        if (data.length === 0) {
+          setReservations([]); // Clear the reservations
+          setError(new Error('No reservations found.'));
+        } else {
+          setReservations(data);
+          setError(null); // Clear any previous error
+        }
+      })
+      .catch((error) => {
+        setReservations([]); // Clear the reservations
+        setError(error);
+      });
   };
 
   const handleInputChange = (e) => {
@@ -57,7 +69,7 @@ function SearchReservation() {
                 className='form-control mr-2'
               />
               <div className='input-group-append'>
-                <button type='submit' className='btn btn-primary rounded'>
+                <button type='submit' className='btn btn-primary rounded-pill'>
                   Find
                 </button>
               </div>
@@ -66,7 +78,7 @@ function SearchReservation() {
 
           <ErrorAlert error={error} />
 
-          {reservations.length ? (
+          {error ? null : reservations.length ? (
             <div className='list-group'>
               {reservations.map((reservation) => (
                 <div
