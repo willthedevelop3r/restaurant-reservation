@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { createReservation } from '../utils/api';
 import { useHistory } from 'react-router-dom';
 import ReservationForm from './ReservationForm';
-import ErrorAlert from './ErrorAlert';
+import ErrorAlert from '../layout/ErrorAlert';
 
 const NewReservation = () => {
   const [formData, setFormData] = useState({

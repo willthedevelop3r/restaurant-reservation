@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { readReservation, listTables, seatTable } from '../utils/api';
-import ErrorAlert from './ErrorAlert';
+import ErrorAlert from '../layout/ErrorAlert';
 
-function ReservationSeat() {
+function SeatReservation() {
   const [tables, setTables] = useState([]);
   const [reservation, setReservation] = useState(null);
   const [selectedTable, setSelectedTable] = useState(null);
@@ -120,4 +120,4 @@ function ReservationSeat() {
   );
 }
 
-export default ReservationSeat;
+export default SeatReservation;

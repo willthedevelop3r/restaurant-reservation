@@ -3,11 +3,11 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import Dashboard from '../dashboard/Dashboard';
 import NotFound from './NotFound';
 import { today } from '../utils/date-time';
-import NewReservation from './NewReservation';
-import NewTable from './NewTable';
-import ReservationSeat from './ReservationSeat';
-import SearchReservation from './SearchReservation';
-import EditReservation from './EditReservation'; // <-- Import the EditReservation component
+import NewReservation from '../Reservations/NewReservation';
+import NewTable from '../Tables/NewTable';
+import SeatReservatopm from '../Reservations/SeatReservation';
+import SearchReservation from '../Reservations/SearchReservation';
+import EditReservation from '../Reservations/EditReservation'; //
 
 function Routes() {
   return (
@@ -25,7 +25,7 @@ function Routes() {
         <NewReservation />
       </Route>
       <Route path='/reservations/:reservation_id/seat'>
-        <ReservationSeat />
+        <SeatReservatopm />
       </Route>
       <Route path='/reservations/:reservation_id/edit'>
         <EditReservation />

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { readReservation, updateReservation } from '../utils/api';
 import ReservationForm from './ReservationForm';
-import ErrorAlert from './ErrorAlert';
+import ErrorAlert from '../layout/ErrorAlert';
 
 const EditReservation = () => {
   const { reservation_id } = useParams();

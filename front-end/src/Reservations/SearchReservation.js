@@ -4,7 +4,7 @@ import {
   updateReservationStatus,
 } from '../utils/api';
 import { Link } from 'react-router-dom';
-import ErrorAlert from './ErrorAlert';
+import ErrorAlert from '../layout/ErrorAlert';
 
 function SearchReservation() {
   const [mobileNumber, setMobileNumber] = useState('');
