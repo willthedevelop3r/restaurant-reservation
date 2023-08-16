@@ -12,6 +12,7 @@ function create(newTable) {
   return knex('tables').insert(newTable).returning('*');
 }
 
+// Update the 'tables' table to associate the specified reservation with the table.
 function seatReservation(tableId, reservationId) {
   return knex.transaction(async (trx) => {
     await knex('tables')
@@ -28,10 +29,12 @@ function finishTable(tableId) {
       .where({ table_id: tableId })
       .first();
 
+    // Update the status of the associated reservation to "finished"
     await trx('reservations')
       .where({ reservation_id: table.reservation_id })
       .update({ status: 'finished' });
 
+    // Free up the table by setting its reservation_id to null
     await trx('tables')
       .where({ table_id: tableId })
       .update({ reservation_id: null });

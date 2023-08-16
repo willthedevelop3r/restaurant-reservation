@@ -12,7 +12,7 @@ function listByDate(date) {
     .orderBy('reservation_time', 'asc');
 }
 
-function create(newReservation) {
+async function create(newReservation) {
   return knex('reservations')
     .insert(newReservation)
     .returning('*')
@@ -33,6 +33,8 @@ async function updateStatus(reservation_id, status) {
     .then((updatedRecords) => updatedRecords[0]);
 }
 
+// Use the translate function to remove common formatting characters from the mobile_number column
+// and then use the like operator to match against the provided mobile_number (after stripping non-digit characters)
 function search(mobile_number) {
   return knex('reservations')
     .whereRaw(

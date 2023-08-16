@@ -10,6 +10,7 @@ async function list(req, res) {
     return res.json({ data: data });
   }
 
+  // If date is present render list by date
   const data = date ? await service.listByDate(date) : await service.list();
   res.json({ data: data });
 }
@@ -66,12 +67,15 @@ function validatePeopleCount(req, res, next) {
 function validateReservationDate(req, res, next) {
   const { reservation_date } = req.body.data;
 
+  // Check if the 'reservation_date' is a valid date string.
+  // The 'Date.parse()' function will return NaN if it cannot parse the input.
   if (isNaN(Date.parse(reservation_date))) {
     return res.status(400).json({ error: 'Invalid reservation_date.' });
   }
 
   const reservationDate = new Date(reservation_date);
 
+  // Checks if day falls on a Tuesday
   if (reservationDate.getUTCDay() === 2) {
     return res.status(400).json({ error: 'Restaurant is closed on Tuesdays.' });
   }
@@ -119,8 +123,11 @@ function validateReservationTime(req, res, next) {
       .json({ error: 'Reservation date and time must be in the future.' });
   }
 
-  // // Validation check for reservation_time
-  if (!/^([01]\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?$/i.test(reservation_time)) {
+  // Validation check for reservation_time format
+  const isValidFormat = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/.test(
+    reservation_time
+  );
+  if (!isValidFormat) {
     return res.status(400).json({ error: 'Invalid reservation_time.' });
   }
 
@@ -141,14 +148,13 @@ function validateUpdateReservationTime(req, res, next) {
   const { reservation_time } = req.body.data;
 
   if (!reservation_time) {
-    return next(); // If reservation_time is not being updated, move to the next middleware.
+    return next();
   }
 
-  // Validation check for reservation_time
+  // Validation check for reservation_time format
   const isValidFormat = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/.test(
     reservation_time
   );
-
   if (!isValidFormat) {
     return res.status(400).json({ error: 'Invalid reservation_time.' });
   }
@@ -157,8 +163,6 @@ function validateUpdateReservationTime(req, res, next) {
 }
 
 async function create(req, res) {
-  console.log('Request body:', req.body);
-
   const data = await service.create(req.body.data);
   res.status(201).json({ data: data });
 }
@@ -186,9 +190,8 @@ async function updateStatus(req, res) {
     return res.status(400).json({ error: `Invalid status: ${status}.` });
   }
 
-  const currentReservation = await service.readReservation(reservation_id);
-
   // If the reservation exists but its status is "finished"
+  const currentReservation = await service.readReservation(reservation_id);
   if (currentReservation.status === 'finished') {
     return res.status(400).json({
       error: `Reservation with ID: ${reservation_id} has a status of "finished" and cannot be updated.`,

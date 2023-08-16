@@ -11,6 +11,7 @@ async function read(req, res) {
   const tableId = req.params.table_id;
   const data = await service.readTable(tableId);
 
+  // Check if table exist
   if (!data) {
     return res.status(404).json({ error: `Table not found: ${tableId}` });
   }
@@ -23,20 +24,24 @@ async function create(req, res) {
 
   const { table_name, capacity } = req.body.data;
 
+  // Validations for table_name
   if (!table_name || table_name === '' || table_name.length < 2) {
     return res
       .status(400)
       .json({ error: 'table_name must be at least 2 characters long' });
   }
 
+  // Validation
   if (capacity === undefined) {
     return res.status(400).json({ error: 'capacity is missing' });
   }
 
+  // Validation
   if (capacity === 0) {
     return res.status(400).json({ error: 'capacity cannot be zero' });
   }
 
+  // Validation
   if (typeof capacity !== 'number') {
     return res.status(400).json({ error: 'capacity must be a number' });
   }
@@ -48,12 +53,14 @@ async function create(req, res) {
 async function seat(req, res) {
   const tableId = req.params.table_id;
 
+  // Validation
   if (!req.body.data) {
     return res.status(400).json({ error: 'Data is required.' });
   }
 
   const { reservation_id: reservationId } = req.body.data;
 
+  // Validation
   if (!reservationId) {
     return res.status(400).json({ error: 'reservation_id is required.' });
   }
@@ -102,6 +109,7 @@ async function finish(req, res) {
     return res.status(404).json({ error: `Table not found: ${table_id}` });
   }
 
+  // Check if table is occupied by reservation_id
   if (!table.reservation_id) {
     return res.status(400).json({ error: 'The table is not occupied.' });
   }
