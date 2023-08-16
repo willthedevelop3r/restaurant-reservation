@@ -44,7 +44,6 @@ async function fetchJson(url, options, onCancel) {
     }
 
     const payload = await response.json();
-    console.log('Raw payload from server:', payload);
 
     if (payload.error) {
       return Promise.reject({ message: payload.error });
@@ -71,20 +70,8 @@ export async function listReservations(params, signal) {
     url.searchParams.append(key, value.toString())
   );
   return await fetchJson(url, { headers, signal }, [])
-    .then((data) => {
-      console.log('Data from fetchJson:', data);
-      return data;
-    })
     .then(formatReservationDate)
-    .then((data) => {
-      console.log('Data after formatReservationDate:', data);
-      return data;
-    })
-    .then(formatReservationTime)
-    .then((data) => {
-      console.log('Data after formatReservationTime:', data);
-      return data;
-    });
+    .then(formatReservationTime);
 }
 
 export async function createReservation(formData, signal) {
