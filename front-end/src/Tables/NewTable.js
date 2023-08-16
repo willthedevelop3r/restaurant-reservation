@@ -32,8 +32,6 @@ function NewTable() {
     // Call the API function
     createTable(formData, abortController.signal)
       .then((table) => {
-        console.log('Table created:', table);
-
         // Reset the form after successful submission
         setFormData({
           table_name: '',
