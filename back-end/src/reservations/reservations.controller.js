@@ -121,8 +121,12 @@ function validateReservationTime(req, res, next) {
 
   // Combine reservation date and time for a complete date object
   const reservationDateTime = new Date(
-    `${reservation_date}T${reservation_time}`
+    `${reservation_date}T${reservation_time}Z`
   );
+
+  // Adjust for Central Time to UTC (add 5 hours)
+  reservationDateTime.setHours(reservationDateTime.getHours() + 5);
+
   const now = new Date();
 
   console.log('Now (Local):', now);
