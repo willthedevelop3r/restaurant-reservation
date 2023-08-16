@@ -85,6 +85,15 @@ function validateReservationDate(req, res, next) {
 
 function validateReservationTime(req, res, next) {
   const { reservation_time, reservation_date } = req.body.data;
+  console.log('reservation_time: ', reservation_time);
+
+  // Validation check for reservation_time format
+  const isValidFormat = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/.test(
+    reservation_time
+  );
+  if (!isValidFormat) {
+    return res.status(400).json({ error: 'Invalid reservation_time.' });
+  }
 
   const reservationTime = reservation_time.split(':');
   const reservationHours = Number(reservationTime[0]);
@@ -116,19 +125,15 @@ function validateReservationTime(req, res, next) {
   );
   const now = new Date();
 
-  // Check if the reservation date and time are in the past
-  if (reservationDateTime < now) {
+  console.log('Now (Local):', now);
+  console.log('Now (UTC):', now.toISOString());
+  console.log('ReservationDateTime (UTC):', reservationDateTime.toISOString());
+
+  // Convert both dates to UTC and compare
+  if (reservationDateTime.getTime() < now.getTime()) {
     return res
       .status(400)
       .json({ error: 'Reservation date and time must be in the future.' });
-  }
-
-  // Validation check for reservation_time format
-  const isValidFormat = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/.test(
-    reservation_time
-  );
-  if (!isValidFormat) {
-    return res.status(400).json({ error: 'Invalid reservation_time.' });
   }
 
   next();
