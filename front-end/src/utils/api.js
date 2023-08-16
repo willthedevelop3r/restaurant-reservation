@@ -4,7 +4,7 @@
  */
 
 import formatReservationDate from './format-reservation-date';
-import formatReservationTime from './format-reservation-date';
+import formatReservationTime from './format-reservation-time';
 
 let API_BASE_URL;
 
@@ -44,6 +44,7 @@ async function fetchJson(url, options, onCancel) {
     }
 
     const payload = await response.json();
+    console.log('Raw payload from server:', payload);
 
     if (payload.error) {
       return Promise.reject({ message: payload.error });
@@ -70,8 +71,20 @@ export async function listReservations(params, signal) {
     url.searchParams.append(key, value.toString())
   );
   return await fetchJson(url, { headers, signal }, [])
+    .then((data) => {
+      console.log('Data from fetchJson:', data);
+      return data;
+    })
     .then(formatReservationDate)
-    .then(formatReservationTime);
+    .then((data) => {
+      console.log('Data after formatReservationDate:', data);
+      return data;
+    })
+    .then(formatReservationTime)
+    .then((data) => {
+      console.log('Data after formatReservationTime:', data);
+      return data;
+    });
 }
 
 export async function createReservation(formData, signal) {
