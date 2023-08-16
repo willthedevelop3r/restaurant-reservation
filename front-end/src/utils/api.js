@@ -4,7 +4,7 @@
  */
 
 import formatReservationDate from './format-reservation-date';
-import formatReservationTime from './format-reservation-date';
+import formatReservationTime from './format-reservation-time';
 
 let API_BASE_URL;
 
