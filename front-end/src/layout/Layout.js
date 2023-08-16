@@ -11,6 +11,8 @@ import './Layout.css';
  *
  * @returns {JSX.Element}
  */
+
+// Layout component for routes and menu
 function Layout() {
   return (
     <div className='container-fluid'>

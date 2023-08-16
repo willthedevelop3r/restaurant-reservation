@@ -13,21 +13,24 @@ function SearchReservation() {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    const abortController = new AbortController();
 
-    searchReservationsByPhoneNumber(mobileNumber)
+    searchReservationsByPhoneNumber(mobileNumber, abortController.signal)
       .then((data) => {
+        // Validation check
         if (data.length === 0) {
-          setReservations([]); // Clear the reservations
           setError(new Error('No reservations found.'));
         } else {
           setReservations(data);
-          setError(null); // Clear any previous error
         }
       })
       .catch((error) => {
-        setReservations([]); // Clear the reservations
-        setError(error);
+        if (error.name !== 'AbortError') {
+          setError(error);
+        }
       });
+
+    return () => abortController.abort(); // Cleanup the AbortController
   };
 
   const handleInputChange = (e) => {
@@ -39,6 +42,7 @@ function SearchReservation() {
       'Do you want to cancel this reservation? This cannot be undone.'
     );
     if (confirmed) {
+      // Call the api function
       updateReservationStatus(reservation_id, 'cancelled')
         .then(() => {
           // Refresh reservations or remove the cancelled one from the list.

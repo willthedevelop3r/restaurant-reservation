@@ -14,23 +14,23 @@ function Dashboard() {
   const queryDate = new URLSearchParams(location.search).get('date'); // Parse the date from the query parameters
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
-  const [tablesError, setTablesError] = useState(null);
+  const [reservationsError, setReservationsError] = useState(null); // To set any reservations error
+  const [tablesError, setTablesError] = useState(null); // To set any tables error
   const [selectedDate, setSelectedDate] = useState(queryDate || today());
 
   useEffect(() => {
-    loadDashboard(selectedDate);
+    loadDashboard(selectedDate); // Load dashboard by selected date
   }, [selectedDate]);
 
   function loadDashboard(date) {
     const abortController = new AbortController();
-    setReservationsError(null);
-    setTablesError(null);
 
+    // Call the api function
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
 
+    // Call the api function
     listTables(abortController.signal).then(setTables).catch(setTablesError);
 
     return () => abortController.abort();
@@ -46,7 +46,7 @@ function Dashboard() {
         'Is this table ready to seat new guests? This cannot be undone.'
       )
     ) {
-      finishTable(tableId)
+      finishTable(tableId) // Call the api function
         .then(() => loadDashboard(selectedDate))
         .catch(setTablesError);
     }
@@ -58,14 +58,12 @@ function Dashboard() {
         'Do you want to cancel this reservation? This cannot be undone.'
       )
     ) {
-      updateReservationStatus(reservationId, 'cancelled')
+      updateReservationStatus(reservationId, 'cancelled') // Call the api function
         .then(() => {
           return loadDashboard(selectedDate);
         })
         .catch((error) => {
-          console.error(
-            `There was an error canceling the reservation: ${error.message}`
-          );
+          setReservationsError(error);
         });
     }
   }

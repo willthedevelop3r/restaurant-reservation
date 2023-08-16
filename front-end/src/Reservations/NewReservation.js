@@ -5,14 +5,15 @@ import ReservationForm from './ReservationForm';
 import ErrorAlert from '../layout/ErrorAlert';
 
 const NewReservation = () => {
-  const [formData, setFormData] = useState({
+  const defaultFormData = {
     first_name: '',
     last_name: '',
     mobile_number: '',
     reservation_date: '',
     reservation_time: '',
     people: 1,
-  });
+  };
+  const [formData, setFormData] = useState(defaultFormData);
   const [error, setError] = useState(null);
   const history = useHistory();
 
@@ -35,25 +36,20 @@ const NewReservation = () => {
     // Call the API function
     createReservation(formData, abortController.signal)
       .then((reservation) => {
-        console.log('Reservation created:', reservation);
-
         // Reset the form after successful submission
-        setFormData({
-          first_name: '',
-          last_name: '',
-          mobile_number: '',
-          reservation_date: '',
-          reservation_time: '',
-          people: 1,
-        });
+        setFormData(defaultFormData);
 
-        // Redirect to the dashboard page for the reservation date
+        // Access the date only from Date object
         const dateOnly = new Date(reservation.reservation_date)
           .toISOString()
           .split('T')[0];
-        history.push(`/dashboard?date=${dateOnly}`);
+        history.push(`/dashboard?date=${dateOnly}`); // Redirect to the dashboard page for the reservation date
       })
-      .catch((error) => setError(error));
+      .catch((error) => {
+        if (error.name !== 'AbortError') {
+          setError(error);
+        }
+      });
     return () => abortController.abort(); // Cleanup the AbortController
   };
 

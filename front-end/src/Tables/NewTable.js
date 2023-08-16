@@ -26,6 +26,7 @@ function NewTable() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const abortController = new AbortController();
 
     // Call the API function
@@ -42,7 +43,11 @@ function NewTable() {
         // Redirect to the dashboard or wherever appropriate for tables
         history.push('/dashboard');
       })
-      .catch((error) => setError(error));
+      .catch((error) => {
+        if (error.name !== 'AbortError') {
+          setError(error);
+        }
+      });
 
     return () => abortController.abort(); // Cleanup the AbortController
   };

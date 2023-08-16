@@ -7,17 +7,19 @@ function SeatReservation() {
   const [tables, setTables] = useState([]);
   const [reservation, setReservation] = useState(null);
   const [selectedTable, setSelectedTable] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); // To set any errors
   const history = useHistory();
   const { reservation_id } = useParams();
 
   useEffect(() => {
     const abortController = new AbortController();
 
+    // Call the api function
     readReservation(reservation_id, abortController.signal)
       .then(setReservation)
       .catch(setError);
 
+    //Call the api function
     listTables(abortController.signal)
       .then((availableTables) => {
         setTables(availableTables);
@@ -27,28 +29,31 @@ function SeatReservation() {
       })
       .catch(setError);
 
-    return () => abortController.abort();
+    return () => abortController.abort(); // Cleanup AbortController
   }, [reservation_id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const abortController = new AbortController();
 
+    // Validation check
     if (!reservation) {
       setError(new Error('Reservation not found!'));
       return;
     }
 
+    // Validation check
     if (!selectedTable) {
       setError(new Error('Please select a table.'));
       return;
     }
 
+    // Validation check
     if (selectedTable.reservation_id) {
       setError(new Error('This table is already occupied.'));
       return;
     }
 
+    // Validation check
     if (selectedTable.capacity < reservation.people) {
       setError(
         new Error(
@@ -58,13 +63,13 @@ function SeatReservation() {
       return;
     }
 
-    seatTable(selectedTable.table_id, reservation_id, abortController.signal)
+    seatTable(selectedTable.table_id, reservation_id)
       .then(() => {
         history.push('/dashboard');
       })
       .catch(setError);
 
-    return () => abortController.abort();
+    return;
   };
 
   const handleCancel = () => {

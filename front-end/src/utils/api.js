@@ -13,8 +13,6 @@ if (window.location.hostname === 'localhost') {
 } else {
   API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 }
-// const API_BASE_URL =
-//   process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
 
 /**
  * Defines the default headers for these functions to work with `json-server`
@@ -76,13 +74,12 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
-export async function createReservation(formData) {
+export async function createReservation(formData, signal) {
   const response = await fetch(`${API_BASE_URL}/reservations`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({ data: formData }),
+    signal,
   });
 
   if (!response.ok) {
@@ -93,13 +90,12 @@ export async function createReservation(formData) {
   return response.json().then((response) => response.data);
 }
 
-export async function createTable(formData) {
+export async function createTable(formData, signal) {
   const response = await fetch(`${API_BASE_URL}/tables`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({ data: formData }),
+    signal,
   });
 
   if (!response.ok) {
@@ -113,6 +109,7 @@ export async function createTable(formData) {
 export async function listTables(signal) {
   const response = await fetch(`${API_BASE_URL}/tables`, {
     method: 'GET',
+    headers,
     signal,
   });
 
@@ -124,11 +121,13 @@ export async function listTables(signal) {
   return response.json().then((response) => response.data);
 }
 
-export async function readReservation(reservation_id) {
+export async function readReservation(reservation_id, signal) {
   const response = await fetch(
     `${API_BASE_URL}/reservations/${reservation_id}`,
     {
       method: 'GET',
+      headers,
+      signal,
     }
   );
 
@@ -140,13 +139,12 @@ export async function readReservation(reservation_id) {
   return response.json().then((response) => response.data);
 }
 
-export async function seatTable(table_id, reservation_id) {
+export async function seatTable(table_id, reservation_id, signal) {
   const response = await fetch(`${API_BASE_URL}/tables/${table_id}/seat`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({ data: { reservation_id: reservation_id } }),
+    signal,
   });
 
   if (!response.ok) {
@@ -157,12 +155,11 @@ export async function seatTable(table_id, reservation_id) {
   return response.json().then((response) => response.data);
 }
 
-export async function finishTable(table_id) {
+export async function finishTable(table_id, signal) {
   const response = await fetch(`${API_BASE_URL}/tables/${table_id}/seat`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
+    signal,
   });
 
   if (!response.ok) {
@@ -189,15 +186,14 @@ export async function searchReservationsByPhoneNumber(mobile_number, signal) {
     .then(formatReservationTime);
 }
 
-export async function updateReservationStatus(reservation_id, status) {
+export async function updateReservationStatus(reservation_id, status, signal) {
   const response = await fetch(
     `${API_BASE_URL}/reservations/${reservation_id}/status`,
     {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({ data: { status: status } }),
+      signal,
     }
   );
 
@@ -209,15 +205,14 @@ export async function updateReservationStatus(reservation_id, status) {
   return response.json().then((response) => response.data);
 }
 
-export async function updateReservation(reservation_id, updatedData) {
+export async function updateReservation(reservation_id, updatedData, signal) {
   const response = await fetch(
     `${API_BASE_URL}/reservations/${reservation_id}`,
     {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({ data: updatedData }),
+      signal,
     }
   );
 

@@ -8,6 +8,7 @@ import React from 'react';
  *  a bootstrap danger alert that contains the message string.
  */
 
+// Error alert helper function
 function ErrorAlert({ error }) {
   return (
     error && (

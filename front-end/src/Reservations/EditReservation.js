@@ -18,13 +18,15 @@ const EditReservation = () => {
   };
 
   const [formData, setFormData] = useState(defaultFormData);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); // To set any errors
 
   useEffect(() => {
     const abortController = new AbortController();
 
+    // Call the api function
     readReservation(reservation_id, abortController.signal)
       .then((data) => {
+        // Access the date only from Date object
         data.reservation_date = new Date(data.reservation_date)
           .toISOString()
           .split('T')[0];
@@ -32,7 +34,7 @@ const EditReservation = () => {
       })
       .catch((error) => setError(error));
 
-    return () => abortController.abort();
+    return () => abortController.abort(); // Cleanup the AbortController
   }, [reservation_id]);
 
   const handleInputChange = (e) => {
@@ -49,22 +51,25 @@ const EditReservation = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const abortController = new AbortController();
 
-    console.log('Submitting form data:', formData);
-
+    // Call the api function
     updateReservation(reservation_id, formData, abortController.signal)
       .then((updatedReservation) => {
-        console.log('Reservation updated:', updatedReservation);
-
+        // Access the date only from Date object
         const dateOnly = new Date(updatedReservation.reservation_date)
           .toISOString()
           .split('T')[0];
-        history.push(`/dashboard?date=${dateOnly}`);
+        history.push(`/dashboard?date=${dateOnly}`); // Redirect to the dashboard page for the reservation date
       })
-      .catch((error) => setError(error));
+      .catch((error) => {
+        if (error.name !== 'AbortError') {
+          setError(error);
+        }
+      });
 
-    return () => abortController.abort();
+    return () => abortController.abort(); // Cleanup the AbortController
   };
 
   return (
