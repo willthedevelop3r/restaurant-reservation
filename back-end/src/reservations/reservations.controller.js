@@ -117,7 +117,7 @@ function validateReservationTime(req, res, next) {
   const now = new Date();
 
   // Check if the reservation date and time are in the past
-  if (reservationDateTime <= now) {
+  if (reservationDateTime < now) {
     return res
       .status(400)
       .json({ error: 'Reservation date and time must be in the future.' });
