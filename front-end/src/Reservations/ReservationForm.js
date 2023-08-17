@@ -66,7 +66,9 @@ const ReservationForm = ({
         </div>
 
         <div className='form-group'>
-          <label htmlFor='reservation_time'>Reservation Time:</label>
+          <label htmlFor='reservation_time'>
+            Enter Reservation in Central Time:
+          </label>
           <input
             type='time'
             name='reservation_time'
