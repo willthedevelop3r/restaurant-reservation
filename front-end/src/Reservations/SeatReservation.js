@@ -96,7 +96,7 @@ function SeatReservation() {
           {tables.length ? (
             tables.map((table) => (
               <option key={table.table_id} value={table.table_id}>
-                Table name: {table.table_name} - Capacity: {table.capacity}
+                {table.table_name} - {table.capacity}
               </option>
             ))
           ) : (
