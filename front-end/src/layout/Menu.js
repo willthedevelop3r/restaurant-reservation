@@ -1,6 +1,7 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import { AiOutlineClose } from 'react-icons/ai';
 
 /**
  * Defines the menu for this application.
@@ -9,19 +10,44 @@ import { Link } from 'react-router-dom';
  */
 
 function Menu() {
+  const [showMenu, setShowMenu] = useState(false);
+
+  const handleMenuToggle = () => {
+    setShowMenu(!showMenu);
+  };
+
   return (
     <nav className='navbar navbar-dark align-items-start p-0'>
       <div className='container-fluid d-flex flex-column p-0'>
-        <Link
-          className='navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0'
-          to='/'
-        >
-          <div className='sidebar-brand-text mx-3'>
-            <span>Periodic Tables</span>
+        <div className='d-flex justify-content-between align-items-center w-100 p-2'>
+          <Link className='navbar-brand m-0' to='/'>
+            <div className='sidebar-brand-text'>
+              <span>Periodic Tables</span>
+            </div>
+          </Link>
+          <div className='d-md-none'>
+            {showMenu ? (
+              <AiOutlineClose
+                style={{ fontSize: '20px' }}
+                className='cursor-pointer text-white'
+                onClick={handleMenuToggle}
+              />
+            ) : (
+              <GiHamburgerMenu
+                style={{ fontSize: '25px' }}
+                className='cursor-pointer text-white'
+                onClick={handleMenuToggle}
+              />
+            )}
           </div>
-        </Link>
+        </div>
         <hr className='sidebar-divider my-0' />
-        <ul className='nav navbar-nav text-light' id='accordionSidebar'>
+        <ul
+          className={`nav navbar-nav text-light ${
+            showMenu ? 'd-block' : 'd-md-block d-none'
+          }`}
+          id='accordionSidebar'
+        >
           <li className='nav-item'>
             <Link className='nav-link' to='/dashboard'>
               <span className='oi oi-dashboard' />
@@ -47,13 +73,6 @@ function Menu() {
             </Link>
           </li>
         </ul>
-        <div className='text-center d-none d-md-inline'>
-          <button
-            className='btn rounded-circle border-0'
-            id='sidebarToggle'
-            type='button'
-          />
-        </div>
       </div>
     </nav>
   );
