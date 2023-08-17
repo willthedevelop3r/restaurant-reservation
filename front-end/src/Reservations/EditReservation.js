@@ -57,11 +57,7 @@ const EditReservation = () => {
     // Call the api function
     updateReservation(reservation_id, formData, abortController.signal)
       .then((updatedReservation) => {
-        // Access the date only from Date object
-        const dateOnly = new Date(updatedReservation.reservation_date)
-          .toISOString()
-          .split('T')[0];
-        history.push(`/dashboard?date=${dateOnly}`); // Redirect to the dashboard page for the reservation date
+        history.push(`/dashboard?date=${updatedReservation.reservation_date}`); // Redirect to the dashboard page for the reservation date
       })
       .catch((error) => {
         if (error.name !== 'AbortError') {
