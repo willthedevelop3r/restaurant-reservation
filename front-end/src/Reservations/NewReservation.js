@@ -32,7 +32,7 @@ const NewReservation = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const abortController = new AbortController();
-    console.log('formData: ', formData);
+
     // Call the API function
     createReservation(formData, abortController.signal)
       .then((reservation) => {

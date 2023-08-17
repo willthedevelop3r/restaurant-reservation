@@ -85,7 +85,6 @@ function validateReservationDate(req, res, next) {
 
 function validateReservationTime(req, res, next) {
   const { reservation_time, reservation_date } = req.body.data;
-  console.log('reservation_time: ', reservation_time);
 
   // Validation check for reservation_time format
   const isValidFormat = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/.test(
@@ -128,10 +127,6 @@ function validateReservationTime(req, res, next) {
   reservationDateTime.setHours(reservationDateTime.getHours() + 5);
 
   const now = new Date();
-
-  console.log('Now (Local):', now);
-  console.log('Now (UTC):', now.toISOString());
-  console.log('ReservationDateTime (UTC):', reservationDateTime.toISOString());
 
   // Convert both dates to UTC and compare
   if (reservationDateTime.getTime() < now.getTime()) {
