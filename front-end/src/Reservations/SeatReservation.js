@@ -81,7 +81,7 @@ function SeatReservation() {
       <ErrorAlert error={error} />
 
       <div className='form-group'>
-        <h2 className='text-center font-weight-bold mb-4'>Seat Table</h2>
+        <h2 className='text-center font-weight-bold mb-4'>Seat Reservation</h2>
         <select
           name='table_id'
           id='table_id'
@@ -96,7 +96,7 @@ function SeatReservation() {
           {tables.length ? (
             tables.map((table) => (
               <option key={table.table_id} value={table.table_id}>
-                {table.table_name} - {table.capacity}
+                Table name: {table.table_name} - Capacity: {table.capacity}
               </option>
             ))
           ) : (

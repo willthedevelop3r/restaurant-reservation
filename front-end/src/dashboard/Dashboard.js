@@ -158,11 +158,21 @@ function Dashboard() {
               ))}
             </div>
           ) : (
-            <p className='text-center'>
-              No reservations for the selected date.
-            </p>
+            <div className='row justify-content-center'>
+              <div className='col-lg-4 col-md-6 col-sm-12'>
+                <div className='card text-center' style={{ width: '100%' }}>
+                  <div className='card-body'>
+                    <p className='card-text'>
+                      No reservations for selected date.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
         </div>
+
+        <ErrorAlert error={reservationsError} />
 
         <div className='container mt-3'>
           <h2 className='font-weight-bold mb-3 text-center'>Tables</h2>
@@ -211,7 +221,6 @@ function Dashboard() {
           )}
         </div>
 
-        <ErrorAlert error={reservationsError} />
         <ErrorAlert error={tablesError} />
       </main>
     </div>
