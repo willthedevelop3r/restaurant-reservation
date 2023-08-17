@@ -166,23 +166,10 @@ function validateUpdateReservationTime(req, res, next) {
   next();
 }
 
-// function validateMobileNumber(req, res, next) {
-//   const { mobile_number } = req.body.data;
-
-//   // Regular expression pattern for a valid mobile number format
-//   const mobilePattern = /^(?:\(\d{3}\)|\d{3}-)\d{3}-\d{4}$/;
-
-//   if (!mobilePattern.test(mobile_number)) {
-//     return res.status(400).json({ error: 'Invalid mobile_number format.' });
-//   }
-
-//   next();
-// }
-
 function validateMobileNumber(req, res, next) {
   const { mobile_number } = req.body.data;
 
-  // Regular expression pattern for a valid mobile number format
+  // Regular expression pattern for a valid mobile_number format
   const mobilePattern = /^\d{3}-\d{3}-\d{4}$/;
 
   if (!mobilePattern.test(mobile_number)) {
@@ -276,7 +263,6 @@ module.exports = {
     validateDataExists,
     validateRequiredFields,
     validatePeopleCount,
-    // validateMobileNumber,
     validateReservationDate,
     validateUpdateReservationTime,
     asyncErrorBoundary(update),

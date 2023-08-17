@@ -29,6 +29,7 @@ const NewReservation = () => {
     history.goBack();
   };
 
+  // Regular expression pattern for a valid mobile number format
   const isValidMobileNumber = (number) =>
     /^(?:\d{3}-\d{3}-\d{4})$/.test(number);
 

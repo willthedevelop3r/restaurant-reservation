@@ -49,9 +49,11 @@ const EditReservation = () => {
     history.goBack();
   };
 
+  // Regular expression pattern for a valid mobile number format
   const isValidMobileNumber = (number) =>
     /^(?:\d{3}-\d{3}-\d{4})$/.test(number);
 
+  // To validate date
   const isDateInThePast = (dateString) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Reset time to compare only the date
@@ -72,7 +74,6 @@ const EditReservation = () => {
     }
 
     // Validate if the date is in the past
-
     if (isDateInThePast(formData.reservation_date)) {
       setError({
         message: 'Reservation date cannot be in the past.',
