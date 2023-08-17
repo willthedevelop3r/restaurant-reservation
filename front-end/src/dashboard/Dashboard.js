@@ -76,7 +76,9 @@ function Dashboard() {
         <h1 className='font-weight-bold mb-3'>Dashboard</h1>
 
         <div className='d-flex flex-column align-items-center gap-2 mb-3'>
-          <h4 className='mb-2'>Reservations for date: {selectedDate}</h4>
+          <h4 className='mb-2'>
+            Reservations for date: {selectedDate.split('T')[0]}
+          </h4>
           <div className='d-flex gap-2'>
             <button
               className='btn btn-primary mr-2 mt-2'

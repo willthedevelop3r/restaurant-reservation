@@ -42,11 +42,12 @@ const ReservationForm = ({
         <div className='form-group'>
           <label htmlFor='mobile_number'>Mobile Number:</label>
           <input
-            type='text'
+            type='tel'
             name='mobile_number'
             id='mobile_number'
             value={formData.mobile_number}
             onChange={handleInputChange}
+            placeholder='555-555-5555'
             required
             className='form-control rounded'
           />

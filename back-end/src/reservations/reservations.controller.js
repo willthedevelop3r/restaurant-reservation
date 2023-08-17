@@ -166,6 +166,32 @@ function validateUpdateReservationTime(req, res, next) {
   next();
 }
 
+// function validateMobileNumber(req, res, next) {
+//   const { mobile_number } = req.body.data;
+
+//   // Regular expression pattern for a valid mobile number format
+//   const mobilePattern = /^(?:\(\d{3}\)|\d{3}-)\d{3}-\d{4}$/;
+
+//   if (!mobilePattern.test(mobile_number)) {
+//     return res.status(400).json({ error: 'Invalid mobile_number format.' });
+//   }
+
+//   next();
+// }
+
+function validateMobileNumber(req, res, next) {
+  const { mobile_number } = req.body.data;
+
+  // Regular expression pattern for a valid mobile number format
+  const mobilePattern = /^\d{3}-\d{3}-\d{4}$/;
+
+  if (!mobilePattern.test(mobile_number)) {
+    return res.status(400).json({ error: 'Invalid mobile_number format.' });
+  }
+
+  next();
+}
+
 async function create(req, res) {
   const data = await service.create(req.body.data);
   res.status(201).json({ data: data });
@@ -236,6 +262,7 @@ module.exports = {
     validateDataExists,
     validateRequiredFields,
     validatePeopleCount,
+    validateMobileNumber,
     validateReservationDate,
     validateReservationTime,
     validateReservationStatus,
@@ -249,6 +276,7 @@ module.exports = {
     validateDataExists,
     validateRequiredFields,
     validatePeopleCount,
+    // validateMobileNumber,
     validateReservationDate,
     validateUpdateReservationTime,
     asyncErrorBoundary(update),

@@ -29,17 +29,31 @@ const NewReservation = () => {
     history.goBack();
   };
 
+  const isValidMobileNumber = (number) =>
+    /^(?:\d{3}-\d{3}-\d{4})$/.test(number);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const abortController = new AbortController();
+
+    // Validate the mobile number before making the API call
+    if (!isValidMobileNumber(formData.mobile_number)) {
+      setError({
+        message: 'Invalid mobile number.',
+      });
+      return; // Prevent form submission
+    }
 
     // Call the API function
     createReservation(formData, abortController.signal)
       .then((reservation) => {
         // Reset the form after successful submission
         setFormData(defaultFormData);
-
-        history.push(`/dashboard?date=${reservation.reservation_date}`); // Redirect to the dashboard page for the reservation date
+        // Access the date only from Date object
+        const dateOnly = new Date(reservation.reservation_date)
+          .toISOString()
+          .split('T')[0];
+        history.push(`/dashboard?date=${dateOnly}`); // Redirect to the dashboard page for the reservation date
       })
       .catch((error) => {
         if (error.name !== 'AbortError') {
