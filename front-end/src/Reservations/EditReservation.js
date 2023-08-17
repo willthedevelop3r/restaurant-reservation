@@ -69,8 +69,8 @@ const EditReservation = () => {
   };
 
   return (
-    <div>
-      <h2>Edit Reservation</h2>
+    <div className='d-flex flex-column align-items-center'>
+      <h2 className='text-center font-weight-bold mt-5'>Edit Reservation</h2>
       <ErrorAlert error={error} />
       <ReservationForm
         formData={formData}

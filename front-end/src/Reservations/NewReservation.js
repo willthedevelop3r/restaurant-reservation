@@ -51,7 +51,7 @@ const NewReservation = () => {
   };
 
   return (
-    <div>
+    <div className='d-flex flex-column align-items-center'>
       <h2 className='text-center font-weight-bold mt-5'>
         Create a New Reservation
       </h2>
