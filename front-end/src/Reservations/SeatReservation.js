@@ -77,11 +77,10 @@ function SeatReservation() {
   };
 
   return (
-    <div className='container mt-5'>
-      <ErrorAlert error={error} />
-
-      <div className='form-group'>
+    <div className='container mt-5 d-flex flex-column align-items-center'>
+      <div className='form-group '>
         <h2 className='text-center font-weight-bold mb-4'>Seat Reservation</h2>
+        <ErrorAlert error={error} />
         <select
           name='table_id'
           id='table_id'
