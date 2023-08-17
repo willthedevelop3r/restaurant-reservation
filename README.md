@@ -2,6 +2,8 @@
 
 [View it live here](https://restaurant-reservation-wx3v.onrender.com/dashboard)
 
+![Restaurant Reservation System](./front-end/src/assets/restaurant-reservation.png)
+
 ## About
 
 The Restaurant Reservation System is a full-stack application crafted to streamline the reservation management process for restaurants. It's the ultimate tool that empowers restaurant managers to effectively manage table reservations, ensuring an organized and delightful dining experience for guests.
